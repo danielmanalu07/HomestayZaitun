@@ -14,5 +14,6 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::get('logout', 'AdminController@Logout')->name('logout.admin');
         Route::resource('kategori-kamar', 'KategoriKamarController');
         Route::resource('fasilitas', 'FasilitasController');
+        Route::resource('carousel', 'CarouselController');
     });
 });

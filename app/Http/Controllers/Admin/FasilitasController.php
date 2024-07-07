@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Fasilitas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class FasilitasController extends Controller
@@ -76,7 +77,7 @@ class FasilitasController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //tr
     }
 
     /**
@@ -84,7 +85,34 @@ class FasilitasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $request->validate([
+                'nama' => 'required|unique:fasilitas,nama,' . $id,
+                'deskripsi' => 'required',
+                'gambar' => 'nullable|mimes:png,jpg,jpeg',
+            ]);
+
+            $fasilitas = Fasilitas::findOrFail($id);
+
+            // If there's a new image, handle the upload and update
+            if ($request->hasFile('gambar')) {
+                $path = public_path('gambar/fasilitas/');
+                File::delete($path . $fasilitas->gambar);
+                $filename = $request->nama . '.' . $request->file('gambar')->extension();
+                $request->file('gambar')->move($path, $filename);
+                $fasilitas->gambar = $filename;
+            }
+
+            $fasilitas->nama = $request->nama;
+            $fasilitas->deskripsi = $request->deskripsi;
+
+            $fasilitas->update();
+
+            return redirect('/admin/fasilitas')->with('success', 'Fasilitas Berhasil Diupdate');
+        } catch (\Throwable $th) {
+            Log::error('Error updating data fasilitas: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengupdate data fasilitas. Error: ' . $th->getMessage());
+        }
     }
 
     /**
@@ -92,6 +120,13 @@ class FasilitasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $fasilitas = Fasilitas::findOrFail($id);
+            $fasilitas->delete();
+            return redirect()->back()->with('success', 'Data berhasil dihapus');
+        } catch (\Throwable $th) {
+            Log::error('Error deleting Fasilitas: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus data fasilitas.');
+        }
     }
 }

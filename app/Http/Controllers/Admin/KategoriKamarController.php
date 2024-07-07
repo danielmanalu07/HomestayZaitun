@@ -62,13 +62,7 @@ class KategoriKamarController extends Controller
      */
     public function show(string $id)
     {
-        try {
-            $kategori_kamar = KategoriKamar::findOrFail($id);
-            return view('Admin.KategoriKamar.Index', compact('kategori_kamar'));
-        } catch (\Throwable $th) {
-            Log::error('Error displaying category room: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menampilkan data kategori kamar.');
-        }
+
     }
 
     /**
