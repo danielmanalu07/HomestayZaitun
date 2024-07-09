@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Carousel;
+use App\Models\Fasilitas;
+use App\Models\Kamar;
+use App\Models\KategoriKamar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +34,11 @@ class AdminController extends Controller
     }
     public function Dashboard()
     {
-        return view('Admin.Dashboard');
+        $kategori_kamars = KategoriKamar::count();
+        $fasilitas = Fasilitas::count();
+        $carousels = Carousel::count();
+        $kamars = Kamar::count();
+        return view('Admin.Dashboard', compact('kategori_kamars', 'fasilitas', 'carousels', 'kamars'));
     }
 
     public function Logout()

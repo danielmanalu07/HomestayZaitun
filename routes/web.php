@@ -15,5 +15,8 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::resource('kategori-kamar', 'KategoriKamarController');
         Route::resource('fasilitas', 'FasilitasController');
         Route::resource('carousel', 'CarouselController');
+        Route::resource('kamar', 'KamarController');
+        Route::resource('gallery', 'GalleryController');
+        Route::get('kamar/{id}/images', 'KamarController@getImages');
     });
 });

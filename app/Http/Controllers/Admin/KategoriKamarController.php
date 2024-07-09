@@ -53,7 +53,7 @@ class KategoriKamarController extends Controller
             return redirect('/admin/kategori-kamar')->with('success', 'Data Berhasil Ditambahkan');
         } catch (\Throwable $th) {
             Log::error('Error storing category room: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data kategori kamar.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data kategori kamar.' . $th->getMessage());
         }
     }
 

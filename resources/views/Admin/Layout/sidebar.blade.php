@@ -102,40 +102,40 @@
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#tables">
                         <i class="fas fa-table"></i>
-                        <p>Tables</p>
+                        <p>Kamar</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="tables">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="tables/tables.html">
-                                    <span class="sub-item">Basic Table</span>
+                                <a href="">
+                                    <span class="sub-item">Tambah Data Kamar</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="tables/datatables.html">
-                                    <span class="sub-item">Datatables</span>
+                                <a href="{{ url('/admin/kamar') }}">
+                                    <span class="sub-item">Lihat Data Kamar</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#maps">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <p>Maps</p>
+                    <a data-bs-toggle="collapse" href="#gallery">
+                        <i class="fas fa-image" aria-hidden="true"></i>
+                        <p>Gallery Kamar</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="maps">
+                    <div class="collapse" id="gallery">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="maps/googlemaps.html">
-                                    <span class="sub-item">Google Maps</span>
+                                <a href="{{ url('/admin/gallery/create') }}">
+                                    <span class="sub-item">Tambah Data Gallery</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="maps/jsvectormap.html">
-                                    <span class="sub-item">Jsvectormap</span>
+                                <a href="{{ url('/admin/gallery') }}">
+                                    <span class="sub-item">Lihat Data Gallery</span>
                                 </a>
                             </li>
                         </ul>
