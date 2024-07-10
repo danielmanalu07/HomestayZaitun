@@ -50,7 +50,7 @@
                             <tr>
                                 <th scope="row">{{ $key + 1 }}</th>
                                 <td>{{ $item->no_kamar }}</td>
-                                <td>Rp. {{ $item->harga_kamar }}</td>
+                                <td>Rp. {{ number_format($item->harga_kamar) }}</td>
                                 <td>{{ $item->kapasitas }}</td>
                                 <td>{{ $item->status }}</td>
                                 <td>{{ $item->view }}</td>

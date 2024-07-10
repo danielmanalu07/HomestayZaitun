@@ -4,7 +4,7 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Guest.Home');
 });
 
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function () {
@@ -18,5 +18,7 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::resource('kamar', 'KamarController');
         Route::resource('gallery', 'GalleryController');
         Route::get('kamar/{id}/images', 'KamarController@getImages');
+        Route::resource('konten1', 'Kontent1Controller');
+        Route::resource('diskon', 'DiskonController');
     });
 });

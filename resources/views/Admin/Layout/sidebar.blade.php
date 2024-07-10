@@ -142,21 +142,42 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#charts">
-                        <i class="far fa-chart-bar"></i>
-                        <p>Charts</p>
+                    <a data-bs-toggle="collapse" href="#content1">
+                        <i class="fas fa-desktop"></i>
+                        <p>Konten 1</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="charts">
+                    <div class="collapse" id="content1">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="charts/charts.html">
-                                    <span class="sub-item">Chart Js</span>
+                                <a href="{{ url('/admin/konten1/create') }}">
+                                    <span class="sub-item">Tambah Data Konten</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="charts/sparkline.html">
-                                    <span class="sub-item">Sparkline</span>
+                                <a href="{{ url('/admin/konten1') }}">
+                                    <span class="sub-item">Lihat Data Konten</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#diskon">
+                        <i class="far fa-credit-card" aria-hidden="true"></i>
+                        <p>Diskon</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="diskon">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{{ url('/admin/diskon/create') }}">
+                                    <span class="sub-item">Tambah Data Diskon</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/admin/diskon') }}">
+                                    <span class="sub-item">Lihat Data Diskon</span>
                                 </a>
                             </li>
                         </ul>
