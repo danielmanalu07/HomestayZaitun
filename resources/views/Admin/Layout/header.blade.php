@@ -117,6 +117,7 @@
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url('admin/profile') }}">Profile</a>
                             <a class="dropdown-item" href=""
                                 onclick="event.preventDefault(); confirmLogout();">Logout</a>
                         </li>

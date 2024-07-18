@@ -36,6 +36,7 @@
 </head>
 
 <body>
+
     <!--================Header Area =================-->
     <header class="header_area">
         <div class="container">
@@ -60,14 +61,26 @@
                         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
                         <!-- User Icon -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-user"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="login.html">Login</a>
-                                <a class="dropdown-item" href="register.html">Register</a>
-                            </div>
+                            @auth('user')
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-user"></i> {{ Auth::guard('user')->user()->nama_lengkap }}
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="">Profile</a>
+                                    <a class="dropdown-item" onclick="return confirmLogout(event)"
+                                        href="{{ route('logout.user') }}">Logout</a>
+                                </div>
+                            @else
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-user"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="{{ route('login.user') }}">Login</a>
+                                    <a class="dropdown-item" href="{{ route('register.user') }}">Register</a>
+                                </div>
+                            @endauth
                         </li>
                         <!-- Notification Icon -->
                         <li class="nav-item dropdown">
@@ -410,6 +423,14 @@
     <script src="{{ asset('Guest/js/stellar.js') }}"></script>
     <script src="{{ asset('Guest/vendors/lightbox/simpleLightbox.min.js') }}"></script>
     <script src="{{ asset('Guest/js/custom.js') }}"></script>
+    <script>
+        function confirmLogout(event) {
+            event.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                window.location.href = event.target.href;
+            }
+        }
+    </script>
 </body>
 
 </html>

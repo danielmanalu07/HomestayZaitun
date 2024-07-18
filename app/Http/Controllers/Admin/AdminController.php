@@ -10,6 +10,7 @@ use App\Models\Kamar;
 use App\Models\KategoriKamar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -47,5 +48,29 @@ class AdminController extends Controller
     {
         Auth::guard('admin')->logout();
         return redirect()->route('login.admin')->with('success', 'Logged Out Berhasil');
+    }
+
+    public function Profile()
+    {
+        $admin = Auth::guard('admin')->user();
+        return view('Admin.profile', compact('admin'));
+    }
+
+    public function UbahPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+            'confirm_password' => 'required',
+        ]);
+
+        $admin = Auth::guard('admin')->user();
+
+        if ($request->input('password') != $request->input('confirm_password')) {
+            return redirect()->back()->with('error', "Password Dan Confirmation Password tidak sesuai");
+        }
+        $admin->password = Hash::make($request->password);
+        $admin->save();
+        return redirect()->back()->with('success', "Password Berhasil Diubah");
+
     }
 }
