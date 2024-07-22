@@ -191,7 +191,7 @@ class UserController extends Controller
 
     public function Home()
     {
-        return view('Guest.Home');
+        return view('User.Home');
     }
 
     public function LupaPassword(Request $request)
@@ -362,5 +362,64 @@ class UserController extends Controller
             }
         }
         return view('User.NewPassword');
+    }
+
+    public function Profile()
+    {
+        $user = Auth::guard('user')->user();
+        return view('User.Auth.Profile', compact('user'));
+    }
+
+    public function UpdateProfile(Request $request)
+    {
+        $request->validate([
+            'nama_lengkap' => 'required',
+            'phone' => 'required|numeric',
+            'alamat' => 'required',
+            'photo' => 'nullable|mimes:png,jpg,jpeg',
+        ]);
+
+        try {
+            $user = Auth::guard('user')->user();
+            $user->nama_lengkap = $request->input('nama_lengkap');
+            $user->phone = $request->input('phone');
+            $user->alamat = $request->input('alamat');
+
+            $photoProfile = null;
+            if ($request->hasFile('photo')) {
+                $photoProfile = $request->nama_lengkap . '.' . $request->file('photo')->extension();
+                $request->file('photo')->move(public_path('Customer/Profile'), $photoProfile);
+            }
+            $user->photo = $photoProfile ?? '';
+            $user->save();
+            return redirect()->back()->with('success', 'Berhasil Mengupdate Data Profile');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Mengupdate Data Profile');
+
+        }
+
+    }
+
+    public function UbahPassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|min:6',
+            'new_password' => 'required|confirmed|min:6',
+        ]);
+
+        try {
+            $user = Auth::guard('user')->user();
+
+            if (!Hash::check($request->input('current_password'), $user->password)) {
+                return redirect()->back()->with('error_password', 'Current Password Inccorect');
+            }
+
+            $user->password = Hash::make($request->input('new_password'));
+            $user->save();
+            return redirect()->back()->with('success_password', 'Password Berhasil Diubah');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error_password', 'Terjadi Kesalahan Dalam Perubahan Password');
+        }
+
     }
 }

@@ -40,5 +40,8 @@ Route::prefix('/user')->namespace('App\Http\Controllers\User')->group(function (
     Route::middleware([UserMiddleware::class, UserVerifyEmail::class])->group(function () {
         Route::get('home', 'UserController@Home')->name('user.home');
         Route::get('logout', 'UserController@Logout')->name('logout.user');
+        Route::get('profile', 'UserController@Profile')->name('user.profile');
+        Route::put('update-profile', 'UserController@UpdateProfile')->name('user.update.profile');
+        Route::put('ubah-password', 'UserController@UbahPassword')->name('user.ubah.password');
     });
 });
