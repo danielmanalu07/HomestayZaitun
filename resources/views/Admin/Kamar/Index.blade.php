@@ -249,7 +249,7 @@
                                     var img = document.createElement('img');
                                     img.src = data[key];
                                     img.className =
-                                        'd-block w-100 img-fluid'; // Tambahkan kelas img-fluid untuk responsivitas
+                                        'd-block w-100 img-fluid';
                                     div.appendChild(img);
                                     carouselInner.appendChild(div);
                                 }
@@ -264,7 +264,7 @@
                             }
 
                             var carousel = new bootstrap.Carousel(document.getElementById(
-                                'carouselImages')); // Pastikan carousel diinisialisasi ulang
+                                'carouselImages'));
                         });
                 });
             });

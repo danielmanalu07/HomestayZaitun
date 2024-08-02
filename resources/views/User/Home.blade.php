@@ -31,42 +31,22 @@
     <section class="banner_area">
         <div id="bannerCarousel" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
-                <li data-target="#bannerCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#bannerCarousel" data-slide-to="1"></li>
-                <li data-target="#bannerCarousel" data-slide-to="2"></li>
+                @foreach ($carousel as $index => $item)
+                    <li data-target="#bannerCarousel" data-slide-to="{{ $index }}"
+                        class="{{ $index == 0 ? 'active' : '' }}"></li>
+                @endforeach
             </ol>
             <div class="carousel-inner">
-                <div class="carousel-item active"
-                    style="background-image: url('{{ asset('Guest/image/about_banner.jpg') }}');">
-                    <div class="container">
-                        <div class="banner_content text-center">
-                            <h6>Away from monotonous life</h6>
-                            <h2>Relax Your Mind</h2>
-                            <p>If you are looking at blank cassettes on the web, you may be very confused at the<br>
-                                difference in price. You may see some for as low as $.17 each.</p>
+                @foreach ($carousel as $index => $item)
+                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}"
+                        style="background-image: url('{{ asset('gambar/carousel/' . $item->gambar) }}');">
+                        <div class="container">
+                            <div class="banner_content text-center text-bg-dark">
+                                <h2>{{ $item->text }}</h2>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="carousel-item" style="background-image: url('{{ asset('Guest/image/banner_bg.jpg') }}');">
-                    <div class="container">
-                        <div class="banner_content text-center">
-                            <h6>Discover New Horizons</h6>
-                            <h2>Adventure Awaits</h2>
-                            <p>Explore the unexplored, and embark on a journey of a lifetime. Your adventure begins
-                                here.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item" style="background-image: url('{{ asset('Guest/image/facilites_bg.jpg') }}');">
-                    <div class="container">
-                        <div class="banner_content text-center">
-                            <h6>Experience Luxury</h6>
-                            <h2>Stay with Us</h2>
-                            <p>Indulge in the ultimate luxury experience with our top-notch amenities and exceptional
-                                service.</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
             <a class="carousel-control-prev" href="#bannerCarousel" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -82,6 +62,7 @@
             </div>
         </div>
     </section>
+
     <!--================Banner Area =================-->
 
     <!--================ Accomodation Area  =================-->
@@ -91,54 +72,22 @@
                 <h2 class="title_color">Recomendation Room</h2>
             </div>
             <div class="row mb_30">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="accomodation_item text-center">
-                        <div class="hotel_img">
-                            <img src="{{ asset('Guest/image/room1.jpg') }}" alt="">
-                            <a href="ViewDetails.html" class="btn theme_btn button_hover">Lihat Detail</a>
+                @foreach ($kategoris as $kategori)
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="accomodation_item text-center">
+                            <div class="hotel_img">
+                                <img src="{{ asset('gambar/kategoriKamar/' . $kategori->gambar) }}" alt=""
+                                    width="100%" height="100%">
+                                <a href="{{ route('detail.room', $kategori->id) }}" class="btn theme_btn button_hover">Lihat
+                                    Detail</a>
+                            </div>
+                            <a href="ViewDetails.html">
+                                <h4 class="sec_h4">{{ $kategori->nama }}</h4>
+                            </a>
+                            {{-- <h5>$250<small>/night</small></h5> --}}
                         </div>
-                        <a href="ViewDetails.html">
-                            <h4 class="sec_h4">Double Deluxe Room</h4>
-                        </a>
-                        <h5>$250<small>/night</small></h5>
                     </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="accomodation_item text-center">
-                        <div class="hotel_img">
-                            <img src="{{ asset('Guest/image/room2.jpg') }}" alt="">
-                            <a href="ViewDetails.html" class="btn theme_btn button_hover">Lihat Detail</a>
-                        </div>
-                        <a href="ViewDetails.html">
-                            <h4 class="sec_h4">Single Deluxe Room</h4>
-                        </a>
-                        <h5>$200<small>/night</small></h5>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="accomodation_item text-center">
-                        <div class="hotel_img">
-                            <img src="{{ asset('Guest/image/room3.jpg') }}" alt="">
-                            <a href="ViewDetails.html" class="btn theme_btn button_hover">Lihat Detail</a>
-                        </div>
-                        <a href="ViewDetails.html">
-                            <h4 class="sec_h4">Honeymoon Suit</h4>
-                        </a>
-                        <h5>$750<small>/night</small></h5>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="accomodation_item text-center">
-                        <div class="hotel_img">
-                            <img src="{{ asset('Guest/image/room4.jpg') }}" alt="">
-                            <a href="ViewDetails.html" class="btn theme_btn button_hover">Lihat Detail</a>
-                        </div>
-                        <a href="ViewDetails.html">
-                            <h4 class="sec_h4">Economy Double</h4>
-                        </a>
-                        <h5>$200<small>/night</small></h5>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -152,50 +101,76 @@
             <div class="section_title text-center">
                 <h2 class="title_w">Fasilitas</h2>
             </div>
-            <div class="row mb_30">
-                <div class="col-lg-4 col-md-6">
-                    <div class="facilities_item">
-                        <h4 class="sec_h4"><i class="lnr lnr-dinner"></i>Restaurant</h4>
-                        <p>Usage of the Internet is becoming more common due to rapid advancement of technology and
-                            power.</p>
+            @if (count($fasilitas) > 6)
+                <div id="facilitiesCarousel" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        @foreach ($fasilitas->chunk(6) as $index => $chunk)
+                            <li data-target="#facilitiesCarousel" data-slide-to="{{ $index }}"
+                                class="{{ $index == 0 ? 'active' : '' }}"></li>
+                        @endforeach
+                    </ol>
+                    <div class="carousel-inner">
+                        @foreach ($fasilitas->chunk(6) as $index => $chunk)
+                            <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                <div class="row">
+                                    @foreach ($chunk as $item)
+                                        <div class="col-lg-4 col-md-6">
+                                            <div class="facilities_item">
+                                                <div class="facilities_img mb-2">
+                                                    <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}"
+                                                        alt="{{ $item->nama }}"
+                                                        class="img-fluid img-thumbnail zoom-image">
+                                                </div>
+                                                <h4>{{ $item->nama }}</h4>
+                                                <p id="deskripsi-{{ $item->id }}">
+                                                    {{ Str::limit($item->deskripsi, 30) }}
+                                                    @if (Str::length($item->deskripsi) > 30)
+                                                        <a href="#" class="view-more" data-toggle="modal"
+                                                            data-target="#descriptionModal" data-nama="{{ $item->nama }}"
+                                                            data-deskripsi="{{ $item->deskripsi }}">More</a>
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="facilities_item">
-                        <h4 class="sec_h4"><i class="lnr lnr-bicycle"></i>Sports CLub</h4>
-                        <p>Usage of the Internet is becoming more common due to rapid advancement of technology and
-                            power.</p>
-                    </div>
+                <a class="carousel-control-prev custom-carousel-control-prev" href="#facilitiesCarousel" role="button"
+                    data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next custom-carousel-control-next" href="#facilitiesCarousel" role="button"
+                    data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            @else
+                <div class="row mb_30">
+                    @foreach ($fasilitas as $item)
+                        <div class="col-lg-4 col-md-6">
+                            <div class="facilities_item">
+                                <div class="facilities_img mb-2">
+                                    <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}" alt="{{ $item->nama }}"
+                                        class="img-fluid img-thumbnail zoom-image">
+                                </div>
+                                <h4>{{ $item->nama }}</h4>
+                                <p id="deskripsi-{{ $item->id }}">
+                                    {{ Str::limit($item->deskripsi, 30) }}
+                                    @if (Str::length($item->deskripsi) > 30)
+                                        <a href="#" class="view-more" data-toggle="modal"
+                                            data-target="#descriptionModal" data-nama="{{ $item->nama }}"
+                                            data-deskripsi="{{ $item->deskripsi }}">More</a>
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="facilities_item">
-                        <h4 class="sec_h4"><i class="lnr lnr-shirt"></i>Swimming Pool</h4>
-                        <p>Usage of the Internet is becoming more common due to rapid advancement of technology and
-                            power.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="facilities_item">
-                        <h4 class="sec_h4"><i class="lnr lnr-car"></i>Rent a Car</h4>
-                        <p>Usage of the Internet is becoming more common due to rapid advancement of technology and
-                            power.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="facilities_item">
-                        <h4 class="sec_h4"><i class="lnr lnr-construction"></i>Gymnesium</h4>
-                        <p>Usage of the Internet is becoming more common due to rapid advancement of technology and
-                            power.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="facilities_item">
-                        <h4 class="sec_h4"><i class="lnr lnr-coffee-cup"></i>Bar</h4>
-                        <p>Usage of the Internet is becoming more common due to rapid advancement of technology and
-                            power.</p>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </section>
     <!--================ Facilities Area  =================-->

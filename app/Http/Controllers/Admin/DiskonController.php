@@ -62,10 +62,14 @@ class DiskonController extends Controller
                 return redirect()->back()->with('error', 'Kamar tidak ditemukan');
             }
 
-            $harga_baru = ($kamar->harga_kamar * $diskon->jumlah_diskon) / 100;
+            $diskons = ($kamar->harga_kamar * $diskon->jumlah_diskon) / 100;
+            $harga_baru = $kamar->harga_kamar - $diskons;
             $diskon->harga_baru = $harga_baru;
 
+            $kamar->harga_kamar = $harga_baru;
+
             $diskon->save();
+            $kamar->update();
 
             return redirect('/admin/diskon')->with('success', 'Data Berhasil Ditambahkan');
 
@@ -114,8 +118,13 @@ class DiskonController extends Controller
                 return redirect()->back()->with('error', 'Kamar tidak ditemukan');
             }
 
-            $harga_baru = ($kamar->harga_kamar * $diskons->jumlah_diskon) / 100;
+            $dsk = ($kamar->harga_kamar * $diskons->jumlah_diskon) / 100;
+            $harga_baru = $kamar->harga_kamar - $dsk;
             $diskons->harga_baru = $harga_baru;
+
+            $kamar->harga_kamar = $harga_baru;
+
+            $kamar->update();
 
             $diskons->update();
             return redirect()->back()->with('success', 'Data Berhasil Diupdate');
@@ -132,6 +141,9 @@ class DiskonController extends Controller
     {
         try {
             $diskons = Diskon::findOrFail($id);
+            $kamar = Kamar::find($diskons->id_kamar);
+            $kamar->harga_kamar = $diskons->harga_baru / (1 - ($diskons->jumlah_diskon / 100));
+            $kamar->update();
             $diskons->delete();
             return redirect()->back()->with('success', 'Data Berhasil Dihapus');
         } catch (\Throwable $th) {

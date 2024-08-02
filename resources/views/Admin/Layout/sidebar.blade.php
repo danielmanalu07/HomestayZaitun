@@ -2,9 +2,9 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="" class="logo">
-                <img src="{{ asset('Admin/assets/img/kaiadmin/logo_light.svg') }}" alt="navbar brand" class="navbar-brand"
-                    height="20" />
+            <a href="" class="logo mt-2">
+                <img src="{{ asset('img/logo.png') }}" alt="navbar brand" class="navbar-brand" height="80"
+                    width="150" />
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -108,7 +108,7 @@
                     <div class="collapse" id="tables">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="">
+                                <a href="{{ url('/admin/kamar/create') }}">
                                     <span class="sub-item">Tambah Data Kamar</span>
                                 </a>
                             </li>
@@ -144,7 +144,7 @@
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#content1">
                         <i class="fas fa-desktop"></i>
-                        <p>Konten 1</p>
+                        <p>Konten</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="content1">

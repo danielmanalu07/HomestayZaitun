@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Carousel;
+use App\Models\Fasilitas;
+use App\Models\KategoriKamar;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Models\Verify_Users;
@@ -191,7 +194,11 @@ class UserController extends Controller
 
     public function Home()
     {
-        return view('User.Home');
+        $kategoris = KategoriKamar::withSum('kamars', 'view')
+            ->orderBy('kamars_sum_view', 'desc')->get();
+        $carousel = Carousel::get();
+        $fasilitas = Fasilitas::get();
+        return view('User.Home', compact('carousel', 'fasilitas', 'kategoris'));
     }
 
     public function LupaPassword(Request $request)

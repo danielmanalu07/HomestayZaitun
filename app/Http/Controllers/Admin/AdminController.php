@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Carousel;
+use App\Models\Content1;
+use App\Models\Diskon;
 use App\Models\Fasilitas;
 use App\Models\Gallery;
 use App\Models\Kamar;
@@ -41,7 +43,9 @@ class AdminController extends Controller
         $carousels = Carousel::count();
         $kamars = Kamar::count();
         $galleries = Gallery::count();
-        return view('Admin.Dashboard', compact('kategori_kamars', 'fasilitas', 'carousels', 'kamars', 'galleries'));
+        $konten = Content1::count();
+        $diskon = Diskon::count();
+        return view('Admin.Dashboard', compact('kategori_kamars', 'fasilitas', 'carousels', 'kamars', 'galleries', 'konten', 'diskon'));
     }
 
     public function Logout()

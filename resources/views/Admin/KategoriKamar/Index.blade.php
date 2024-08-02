@@ -2,6 +2,14 @@
 @section('title')
     Data Kategori Kamar
 @endsection
+@push('css')
+    <style>
+        .img-kategori {
+            width: 200px;
+            border-radius: 3%
+        }
+    </style>
+@endpush
 @section('content')
     <div class="container-fluid">
         <a href="{{ url('/admin/kategori-kamar/create') }}" class="btn btn-info btn-sm my-2">Tambah Data</a>
@@ -10,7 +18,6 @@
                 @if (Session::has('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ Session::get('success') }}
-                        </button>
                     </div>
                 @endif
                 <table class="table">
@@ -19,6 +26,7 @@
                             <th scope="col">No</th>
                             <th scope="col">Nama</th>
                             <th scope="col">Deskripsi</th>
+                            <th scope="col">Gambar</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -28,13 +36,17 @@
                                 <th scope="row">{{ $key + 1 }}</th>
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ Str::limit($item->deskripsi, 10) }}</td>
+                                <td><img src="{{ asset('gambar/kategoriKamar/' . $item->gambar) }}" alt="Image Kategori"
+                                        class="img-kategori">
+                                </td>
                                 <td>
                                     <button class="btn btn-sm btn-info btn-detail" data-nama="{{ $item->nama }}"
                                         data-deskripsi="{{ $item->deskripsi }}">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                     <button class="btn btn-sm btn-warning btn-edit" data-id="{{ $item->id }}"
-                                        data-nama="{{ $item->nama }}" data-deskripsi="{{ $item->deskripsi }}">
+                                        data-nama="{{ $item->nama }}" data-deskripsi="{{ $item->deskripsi }}"
+                                        data-gambar="{{ asset('gambar/kategoriKamar/' . $item->gambar) }}">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-danger btn-delete" data-id="{{ $item->id }}"><i
@@ -43,7 +55,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td>Tidak Ada Data</td>
+                                <td colspan="5">Tidak Ada Data</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -80,7 +92,7 @@
                     <h5 class="modal-title" id="editDataLabel">Edit Kategori Kamar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="editForm" method="POST">
+                <form id="editForm" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -93,6 +105,11 @@
                             <label for="editDeskripsi" class="form-label">Deskripsi Kategori</label>
                             <textarea class="form-control" id="editDeskripsi" rows="3" name="deskripsi"
                                 placeholder="Masukkan Deskripsi Kategori" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGambar" class="form-label">Gambar Fasilitas</label>
+                            <input type="file" class="form-control" id="editGambar" name="gambar">
+                            <img id="currentGambar" class="img-thumbnail mt-2" style="max-width: 100%;">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -156,9 +173,11 @@
                     var id = this.dataset.id;
                     var nama = this.dataset.nama;
                     var deskripsi = this.dataset.deskripsi;
+                    var gambar = this.dataset.gambar;
 
                     document.getElementById('editNama').value = nama;
                     document.getElementById('editDeskripsi').value = deskripsi;
+                    document.getElementById('currentGambar').src = gambar;
 
                     var form = document.getElementById('editForm');
                     form.action = '/admin/kategori-kamar/' + id;

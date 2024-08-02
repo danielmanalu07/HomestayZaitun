@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriKamar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
 class KategoriKamarController extends Controller
@@ -45,11 +46,17 @@ class KategoriKamarController extends Controller
             $request->validate([
                 'nama' => 'required|unique:kategori_kamars,nama',
                 'deskripsi' => 'required',
+                'gambar' => 'required|mimes:png,jpg,jpeg',
             ]);
+            $fileName = $request->nama . '.' . $request->file('gambar')->extension();
+            $request->file('gambar')->move(public_path('gambar/kategoriKamar'), $fileName);
 
-            $input = $request->all();
+            $kategori = new KategoriKamar();
+            $kategori->nama = $request->input('nama');
+            $kategori->deskripsi = $request->input('deskripsi');
+            $kategori->gambar = $fileName;
 
-            KategoriKamar::create($input);
+            $kategori->save();
             return redirect('/admin/kategori-kamar')->with('success', 'Data Berhasil Ditambahkan');
         } catch (\Throwable $th) {
             Log::error('Error storing category room: ' . $th->getMessage());
@@ -85,9 +92,17 @@ class KategoriKamarController extends Controller
             ]);
 
             $kategori_kamar = KategoriKamar::findOrFail($id);
-            $input = $request->all();
+            if ($request->hasFile('gambar')) {
+                $path = public_path('gambar/kategoriKamar/');
+                File::delete($path . $kategori_kamar->gambar);
+                $filename = $request->nama . '.' . $request->file('gambar')->extension();
+                $request->file('gambar')->move($path, $filename);
+                $kategori_kamar->gambar = $filename;
+            }
+            $kategori_kamar->nama = $request->nama;
+            $kategori_kamar->deskripsi = $request->deskripsi;
 
-            $kategori_kamar->update($input);
+            $kategori_kamar->update();
             return redirect()->back()->with('success', 'Data Berhasil Diupdate');
         } catch (\Throwable $th) {
             Log::error('Error updating category room: ' . $th->getMessage());
@@ -102,6 +117,8 @@ class KategoriKamarController extends Controller
     {
         try {
             $kategori_kamar = KategoriKamar::findOrFail($id);
+            $path = 'gambar/kategoriKamar/';
+            File::delete($path . $kategori_kamar->gambar);
             $kategori_kamar->delete();
             return redirect()->back()->with('success', 'Data berhasil dihapus');
         } catch (\Throwable $th) {

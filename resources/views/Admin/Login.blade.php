@@ -18,10 +18,15 @@
                     <div class="card border border-light-subtle rounded-3 shadow-sm">
                         <div class="card-body p-3 p-md-4 p-xl-5">
                             <div class="text-center mb-3">
-                                <a href="#!">
-                                    <img src="./assets/img/bsb-logo.svg" alt="BootstrapBrain Logo" width="175"
-                                        height="57">
-                                </a>
+                                <div class="card">
+                                    <div class="card-body" style="background-color:darkslateblue">
+                                        <a href="{{ route('home') }}">
+                                            <img src="{{ asset('img/logo.png') }}" alt="BootstrapBrain Logo"
+                                                width="200" height="100">
+                                        </a>
+                                    </div>
+                                </div>
+
                             </div>
                             @if (Session::has('error'))
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -45,7 +50,7 @@
                                 @csrf
                                 <div class="row gy-2 overflow-hidden">
                                     <div class="col-12">
-                                        <div class="form-floating mb-3">
+                                        <div class="form-floating">
                                             <input type="text" class="form-control" name="username" id="username"
                                                 placeholder="Enter Username"> <br>
                                             <label for="username" class="form-label">Username</label>
@@ -66,7 +71,7 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="d-grid">
-                                            <button class="btn btn-primary btn-lg" type="submit">Log in</button>
+                                            <button class="btn btn-info btn-lg" type="submit">Log in</button>
                                         </div>
                                     </div>
                                 </div>

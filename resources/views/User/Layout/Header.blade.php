@@ -1,8 +1,9 @@
-<header class="header_area">
+<header class="header_area" style="background-color: skyblue">
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: skyblue">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <a class="navbar-brand logo_h" href=""><img src="{{ asset('Guest/image/Logo.png') }}" alt=""></a>
+            <a class="navbar-brand logo_h" href=""><img src="{{ asset('img/logo.png') }}" alt=""
+                    width="150px" height="100px"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="icon-bar"></span>
@@ -12,14 +13,24 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                 <ul class="nav navbar-nav menu_nav ml-auto">
-                    <li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Room.html">Room</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('room') }}">Room</a></li>
                     <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
                     <li class="nav-item"><a class="nav-link" href="History.html">History</a></li>
                     <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
                     <!-- User Icon -->
                     <li class="nav-item dropdown">
-                        @auth('user')
+                        @auth('admin')
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user"></i> {{ Auth::guard('admin')->user()->username }}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="{{ route('dashboard.admin') }}">Dashboard</a>
+                                <a class="dropdown-item" onclick="return confirmLogout(event)"
+                                    href="{{ route('logout.admin') }}">Logout</a>
+                            </div>
+                            @elseauth('user')
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-user"></i> {{ Auth::guard('user')->user()->nama_lengkap }}
