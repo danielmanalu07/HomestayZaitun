@@ -12,7 +12,8 @@ Route::get('/', [UserController::class, 'Home'])->name('home');
 Route::get('/room', [RoomController::class, 'ViewRoom'])->name('room');
 Route::get('/room/detail-kategori/{kategori}', [RoomController::class, 'DetailRoom'])->name('detail.room');
 Route::get('/room/{id}/images', [RoomController::class, 'getImages']);
-Route::match(['get', 'post'], 'booking', [BookingController::class, 'BookingView'])->name('booking');
+Route::get('/booking/{roomId}', [BookingController::class, 'BookingView'])->name('booking')->middleware(UserMiddleware::class);
+Route::post('/booking/order', [BookingController::class, 'CreateBooking'])->name('create.booking')->middleware(UserMiddleware::class);
 
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::match(['get', 'post'], 'login', 'AdminController@Login')->name('login.admin');

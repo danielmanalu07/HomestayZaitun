@@ -16,12 +16,13 @@ return new class extends Migration
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('id_kamar');
-            $table->foreign('id_kamar')->references('id')->on('kamars')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('check_in')->unique();
+            $table->foreign('id_kamar')->references('id')->on('kamars')->onDelete('cascade')->onUpdate('no action');
+            $table->string('check_in');
             $table->string('check_out');
             $table->text('catatan')->nullable();
             $table->integer('jumlah_orang');
-            $table->integer('rating');
+            $table->double('total_harga');
+            $table->integer('rating')->nullable();
             $table->enum('status', ['Menunggu Konfirmasi', 'Ditolak', 'Disetujui'])->default('Menunggu Konfirmasi');
             $table->timestamps();
         });

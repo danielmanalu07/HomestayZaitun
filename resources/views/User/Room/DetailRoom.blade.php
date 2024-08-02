@@ -98,6 +98,10 @@
             modal.show();
         }
 
+        function setRoomId(roomId) {
+            localStorage.setItem('selectedRoomId', roomId);
+        }
+
         function showImageModal(roomId) {
             fetch(`/room/${roomId}/images`)
                 .then(response => response.json())
@@ -195,7 +199,8 @@
                                     <br>
                                     <strong>Pengunjung:</strong> {{ $room->view }}
                                 </p>
-                                <a href="{{ route('booking') }}" class="btn btn-dark">Pesan Sekarang</a>
+                                <a href="{{ route('booking', ['roomId' => $room->id]) }}" class="btn btn-dark">Pesan
+                                    Sekarang</a>
                             </div>
                         </div>
                     </div>

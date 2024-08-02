@@ -28,9 +28,15 @@
             opacity: 1;
         }
 
-        .img-fluid {
-            width: 50vh;
-            border-radius: 5%;
+        .image-container {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -50,7 +56,6 @@
             spinner.classList.remove('show');
         });
 
-        // Script for showing the modal with details
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.view-more-btn').forEach(button => {
                 button.addEventListener('click', function() {
@@ -95,7 +100,7 @@
             @foreach ($kategoris as $item)
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="room-item shadow rounded overflow-hidden">
-                        <div class="position-relative">
+                        <div class="position-relative image-container">
                             <img class="img-fluid" src="{{ asset('gambar/kategoriKamar/' . $item->gambar) }}"
                                 alt="">
                         </div>
@@ -121,6 +126,7 @@
                     </div>
                 </div>
             @endforeach
+
         </div>
     </div>
 
