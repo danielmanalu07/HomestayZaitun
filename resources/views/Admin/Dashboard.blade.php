@@ -105,7 +105,7 @@
                     <div class="row align-items-center">
                         <div class="col-icon">
                             <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                                <i class="fas fa-image"></i>
+                                <i class="fas fa-desktop"></i>
                             </div>
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
@@ -124,7 +124,7 @@
                     <div class="row align-items-center">
                         <div class="col-icon">
                             <div class="icon-big text-center icon-secondary bubble-shadow-small">
-                                <i class="fas fa-image"></i>
+                                <i class="fas fa-credit-card"></i>
                             </div>
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
@@ -137,9 +137,28 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-secondary bubble-shadow-small">
+                                <i class="fa fa-users" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">User Bookings</p>
+                                <h4 class="card-title">{{ $bookings }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="card card-round">
                 <div class="card-header">
                     <div class="card-head-row">
@@ -168,31 +187,61 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card card-primary card-round">
+        <div class="col-md-6">
+            <div class="card card-round">
                 <div class="card-header">
                     <div class="card-head-row">
-                        <div class="card-title">Daily Sales</div>
+                        <div class="card-title">Booking Statistics</div>
+                        <div class="card-tools">
+                            <a href="#" class="btn btn-label-success btn-round btn-sm me-2">
+                                <span class="btn-label">
+                                    <i class="fa fa-pencil"></i>
+                                </span>
+                                Export
+                            </a>
+                            <a href="#" class="btn btn-label-info btn-round btn-sm">
+                                <span class="btn-label">
+                                    <i class="fa fa-print"></i>
+                                </span>
+                                Print
+                            </a>
+                        </div>
                     </div>
-                    <div class="card-category">March 25 - April 02</div>
                 </div>
-                <div class="card-body pb-0">
-                    <div class="mb-4 mt-2">
-                        <h1>$4,578.58</h1>
+                <div class="card-body">
+                    <div class="chart-container" style="min-height: 375px">
+                        <canvas id="statisticsChart"></canvas>
                     </div>
-                    <div class="pull-in">
-                        <canvas id="dailySalesChart"></canvas>
-                    </div>
+                    <div id="myChartLegend"></div>
                 </div>
             </div>
+        </div>
+        <div class="col">
             <div class="card card-round">
-                <div class="card-body pb-0">
-                    <div class="h1 fw-bold float-end text-primary">+5%</div>
-                    <h2 class="mb-2">17</h2>
-                    <p class="text-muted">Users online</p>
-                    <div class="pull-in sparkline-fix">
-                        <div id="lineChart"></div>
+                <div class="card-header">
+                    <div class="card-head-row">
+                        <div class="card-title">Pendapatan Statistics</div>
+                        <div class="card-tools">
+                            <a href="#" class="btn btn-label-success btn-round btn-sm me-2">
+                                <span class="btn-label">
+                                    <i class="fa fa-pencil"></i>
+                                </span>
+                                Export
+                            </a>
+                            <a href="#" class="btn btn-label-info btn-round btn-sm">
+                                <span class="btn-label">
+                                    <i class="fa fa-print"></i>
+                                </span>
+                                Print
+                            </a>
+                        </div>
                     </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="min-height: 375px">
+                        <canvas id="statisticsChart"></canvas>
+                    </div>
+                    <div id="myChartLegend"></div>
                 </div>
             </div>
         </div>

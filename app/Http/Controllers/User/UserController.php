@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Carousel;
+use App\Models\Content1;
 use App\Models\Fasilitas;
 use App\Models\KategoriKamar;
 use App\Models\PasswordReset;
@@ -195,10 +197,18 @@ class UserController extends Controller
     public function Home()
     {
         $kategoris = KategoriKamar::withSum('kamars', 'view')
-            ->orderBy('kamars_sum_view', 'desc')->get();
+            ->orderBy('kamars_sum_view', 'desc')->take(4)->get();
         $carousel = Carousel::get();
         $fasilitas = Fasilitas::get();
-        return view('User.Home', compact('carousel', 'fasilitas', 'kategoris'));
+        $kontents = Content1::get();
+        return view('User.Home', compact('carousel', 'fasilitas', 'kategoris', 'kontents'));
+    }
+
+    public function MyBooking()
+    {
+        $user = Auth::guard('user')->user();
+        $bookings = Booking::where('id_user', $user->id)->get();
+        return view('User.Booking.MyBooking', compact('bookings'));
     }
 
     public function LupaPassword(Request $request)
@@ -428,5 +438,16 @@ class UserController extends Controller
             return redirect()->back()->with('error_password', 'Terjadi Kesalahan Dalam Perubahan Password');
         }
 
+    }
+
+    public function ContactUs()
+    {
+        return view('User.ContactUs');
+    }
+
+    public function Fasilitas()
+    {
+        $fasilitas = Fasilitas::all();
+        return view('User.Fasilitas', compact('fasilitas'));
     }
 }

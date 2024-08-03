@@ -75,7 +75,7 @@ class BookingController extends Controller
 
             $bookings->save();
 
-            return redirect()->back()->with('success', 'Berhasil melakukan pesanan');
+            return redirect()->route('mybooking')->with('success', 'Berhasil melakukan pesanan');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Terjadi Kesalahan saat melakukan pesanan: ' . $th->getMessage());
         }

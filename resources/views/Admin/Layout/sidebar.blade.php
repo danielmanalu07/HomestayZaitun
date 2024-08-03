@@ -184,58 +184,16 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a href="widgets.html">
-                        <i class="fas fa-desktop"></i>
-                        <p>Widgets</p>
-                        <span class="badge badge-success">4</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#submenu">
-                        <i class="fas fa-bars"></i>
-                        <p>Menu Levels</p>
+                    <a data-bs-toggle="collapse" href="#bookings">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <p>User Bookings</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="submenu">
+                    <div class="collapse" id="bookings">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a data-bs-toggle="collapse" href="#subnav1">
-                                    <span class="sub-item">Level 1</span>
-                                    <span class="caret"></span>
-                                </a>
-                                <div class="collapse" id="subnav1">
-                                    <ul class="nav nav-collapse subnav">
-                                        <li>
-                                            <a href="#">
-                                                <span class="sub-item">Level 2</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <span class="sub-item">Level 2</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="collapse" href="#subnav2">
-                                    <span class="sub-item">Level 1</span>
-                                    <span class="caret"></span>
-                                </a>
-                                <div class="collapse" id="subnav2">
-                                    <ul class="nav nav-collapse subnav">
-                                        <li>
-                                            <a href="#">
-                                                <span class="sub-item">Level 2</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">Level 1</span>
+                                <a href="{{ route('data.booking') }}">
+                                    <span class="sub-item">Lihat Data Booking</span>
                                 </a>
                             </li>
                         </ul>

@@ -14,6 +14,9 @@ Route::get('/room/detail-kategori/{kategori}', [RoomController::class, 'DetailRo
 Route::get('/room/{id}/images', [RoomController::class, 'getImages']);
 Route::get('/booking/{roomId}', [BookingController::class, 'BookingView'])->name('booking')->middleware(UserMiddleware::class);
 Route::post('/booking/order', [BookingController::class, 'CreateBooking'])->name('create.booking')->middleware(UserMiddleware::class);
+Route::get('/myBooking', [UserController::class, 'MyBooking'])->name('mybooking')->middleware(UserMiddleware::class);
+Route::get('/contactus', [UserController::class, 'ContactUs'])->name('contactus');
+Route::get('/fasilitas', [UserController::class, 'Fasilitas'])->name('fasilitas');
 
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::match(['get', 'post'], 'login', 'AdminController@Login')->name('login.admin');
@@ -30,6 +33,7 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::resource('diskon', 'DiskonController');
         Route::get('profile', 'AdminController@Profile');
         Route::post('ubah-password', 'AdminController@UbahPassword')->name('admin.new_password');
+        Route::get('data-booking', 'AdminController@DataBooking')->name('data.booking');
     });
 });
 

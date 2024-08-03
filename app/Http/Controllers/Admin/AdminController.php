@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Carousel;
 use App\Models\Content1;
 use App\Models\Diskon;
@@ -45,7 +46,8 @@ class AdminController extends Controller
         $galleries = Gallery::count();
         $konten = Content1::count();
         $diskon = Diskon::count();
-        return view('Admin.Dashboard', compact('kategori_kamars', 'fasilitas', 'carousels', 'kamars', 'galleries', 'konten', 'diskon'));
+        $bookings = Booking::count();
+        return view('Admin.Dashboard', compact('kategori_kamars', 'fasilitas', 'carousels', 'kamars', 'galleries', 'konten', 'diskon', 'bookings'));
     }
 
     public function Logout()
@@ -76,5 +78,11 @@ class AdminController extends Controller
         $admin->save();
         return redirect()->back()->with('success', "Password Berhasil Diubah");
 
+    }
+
+    public function DataBooking()
+    {
+        $bookings = Booking::all();
+        return view('Admin.Booking.DataBooking', compact('bookings'));
     }
 }
