@@ -22,6 +22,7 @@ class Booking extends Model
         'total_harga',
         'rating',
         'status',
+        'bukti_pembayaran',
     ];
 
     public function kamar()

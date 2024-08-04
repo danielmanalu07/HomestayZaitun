@@ -15,8 +15,13 @@ Route::get('/room/{id}/images', [RoomController::class, 'getImages']);
 Route::get('/booking/{roomId}', [BookingController::class, 'BookingView'])->name('booking')->middleware(UserMiddleware::class);
 Route::post('/booking/order', [BookingController::class, 'CreateBooking'])->name('create.booking')->middleware(UserMiddleware::class);
 Route::get('/myBooking', [UserController::class, 'MyBooking'])->name('mybooking')->middleware(UserMiddleware::class);
+Route::put('/cancel-booking/{id}', [UserController::class, 'cancelBooking'])->name('cancel.booking')->middleware(UserMiddleware::class);
+Route::get('/detail-mybooking/{id}', [BookingController::class, 'DetailBooking'])->name('detail.mybooking')->middleware(UserMiddleware::class);
+Route::put('/paymentproof/{id}', [BookingController::class, 'PaymentProof'])->name('paymentproof')->middleware(UserMiddleware::class);
+Route::get('/filter-status', [UserController::class, 'filterStatus'])->name('filter.status')->middleware(UserMiddleware::class);
 Route::get('/contactus', [UserController::class, 'ContactUs'])->name('contactus');
 Route::get('/fasilitas', [UserController::class, 'Fasilitas'])->name('fasilitas');
+Route::put('/submitted-rating/{id}', [UserController::class, 'submitRating'])->name('submit.rating');
 
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::match(['get', 'post'], 'login', 'AdminController@Login')->name('login.admin');
@@ -34,6 +39,11 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::get('profile', 'AdminController@Profile');
         Route::post('ubah-password', 'AdminController@UbahPassword')->name('admin.new_password');
         Route::get('data-booking', 'AdminController@DataBooking')->name('data.booking');
+        Route::get('/bookings', 'AdminController@filterStatus')->name('bookings.filter');
+        Route::put('/reject-booking/{id}', 'AdminController@RejectBooking')->name('reject.booking');
+        Route::put('/approve-booking/{id}', 'AdminController@ApproveBooking')->name('approve.booking');
+        Route::put('/completed-booking/{id}', 'AdminController@CompletedBooking')->name('complete.booking');
+
     });
 });
 

@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@ckeditor/ckeditor5-build-classic": "^42.0.0",
+        "magnific-popup": "^1.2.0",
         "quill": "^2.0.2"
     }
 }

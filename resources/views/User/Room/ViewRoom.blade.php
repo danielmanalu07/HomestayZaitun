@@ -108,11 +108,10 @@
                             <div class="d-flex justify-content-between mb-3">
                                 <h5 class="mb-0">{{ $item->nama }}</h5>
                                 <div class="ps-2">
-                                    <small class="fa fa-star" style="color: gold"></small>
-                                    <small class="fa fa-star" style="color: gold"></small>
-                                    <small class="fa fa-star" style="color: gold"></small>
-                                    <small class="fa fa-star" style="color: gold"></small>
-                                    <small class="fa fa-star" style="color: gold"></small>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <small class="fa fa-star"
+                                            style="color: {{ $i <= round($item->average_rating) ? 'gold' : '#ccc' }}"></small>
+                                    @endfor
                                 </div>
                             </div>
                             <p class="text-body mb-3">{{ Str::limit($item->deskripsi, 40) }}</p>
@@ -126,7 +125,6 @@
                     </div>
                 </div>
             @endforeach
-
         </div>
     </div>
 

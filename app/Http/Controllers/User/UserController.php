@@ -204,13 +204,6 @@ class UserController extends Controller
         return view('User.Home', compact('carousel', 'fasilitas', 'kategoris', 'kontents'));
     }
 
-    public function MyBooking()
-    {
-        $user = Auth::guard('user')->user();
-        $bookings = Booking::where('id_user', $user->id)->get();
-        return view('User.Booking.MyBooking', compact('bookings'));
-    }
-
     public function LupaPassword(Request $request)
     {
         if ($request->isMethod('post')) {
@@ -450,4 +443,55 @@ class UserController extends Controller
         $fasilitas = Fasilitas::all();
         return view('User.Fasilitas', compact('fasilitas'));
     }
+
+    public function MyBooking()
+    {
+        $user = Auth::guard('user')->user();
+        $bookings = Booking::where('id_user', $user->id)->get();
+        return view('User.Booking.MyBooking', compact('bookings'));
+    }
+
+    public function cancelBooking(Request $request, string $id)
+    {
+        $request->validate([
+            'catatan' => 'required',
+        ]);
+        $bookings = Booking::find($id);
+
+        $bookings->catatan = $request->input('catatan');
+        $bookings->status = 'Dibatalkan';
+
+        $bookings->update();
+        return redirect()->back()->with('success', 'Pesanan Berhasil Dibatalkan');
+    }
+
+    public function filterStatus(Request $request)
+    {
+        $status = $request->get('status');
+
+        $query = Booking::query();
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $bookings = $query->get();
+
+        return view('User.Booking.MyBooking', compact('bookings'));
+    }
+
+    public function submitRating(Request $request, string $id)
+    {
+        $request->validate([
+            'rating' => 'required|integer|between:1,5',
+            'catatan' => 'nullable|string',
+        ]);
+
+        $booking = Booking::findOrFail($id);
+        $booking->rating = $request->input('rating');
+        $booking->catatan = $request->input('catatan');
+        $booking->save();
+        return redirect()->back()->with('success', 'Rating submitted successfully!');
+    }
+
 }

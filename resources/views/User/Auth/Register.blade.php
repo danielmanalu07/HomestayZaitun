@@ -106,12 +106,15 @@
                             </div>
                         </form>
                     </div>
-                    <div class="signup-image">
-                        <figure><img src="{{ asset('Customer/Auth/images/signup-image.jpg') }}" alt="sing up image">
-                        </figure>
-                        <a href="{{ route('login.user') }}" class="signup-image-link">I am already have an
-                            account</a>
-                    </div>
+                    <a href="{{ route('home') }}">
+                        <div class="signup-image">
+                            <figure style="background-color: purple; border-radius:5%;"><img
+                                    src="{{ asset('img/logo.png') }}" alt="sing up image">
+                            </figure>
+                            <a href="{{ route('login.user') }}" class="signup-image-link">I am already have an
+                                account</a>
+                        </div>
+                    </a>
                 </div>
             </div>
         </section>

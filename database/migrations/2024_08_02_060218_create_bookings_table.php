@@ -23,7 +23,8 @@ return new class extends Migration
             $table->integer('jumlah_orang');
             $table->double('total_harga');
             $table->integer('rating')->nullable();
-            $table->enum('status', ['Menunggu Konfirmasi', 'Ditolak', 'Disetujui'])->default('Menunggu Konfirmasi');
+            $table->enum('status', ['Menunggu Konfirmasi', 'Ditolak', 'Disetujui', 'Selesai', 'Dibatalkan'])->default('Menunggu Konfirmasi');
+            $table->string('bukti_pembayaran')->nullable();
             $table->timestamps();
         });
     }

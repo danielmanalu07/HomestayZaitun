@@ -7,13 +7,29 @@ use App\Models\Diskon;
 use App\Models\Gallery;
 use App\Models\Kamar;
 use App\Models\KategoriKamar;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
     public function ViewRoom()
     {
         $kategoris = KategoriKamar::all();
+
+        foreach ($kategoris as $kategori) {
+            $kategori->average_rating = $this->getAverageRating($kategori->id);
+        }
+
         return view('User.Room.ViewRoom', compact('kategoris'));
+    }
+
+    private function getAverageRating($kategoriId)
+    {
+        $averageRating = DB::table('bookings')
+            ->join('kamars', 'bookings.id_kamar', '=', 'kamars.id')
+            ->where('kamars.id_kategori', $kategoriId)
+            ->avg('bookings.rating');
+
+        return $averageRating ? $averageRating : 0;
     }
 
     public function DetailRoom($kategori)

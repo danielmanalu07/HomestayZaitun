@@ -14,10 +14,34 @@
             transform: translate(-50%, -50%);
             color: #fff;
         }
+
+        #loadingSpinner {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .loading-spinner.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
     </style>
 @endpush
 @push('js')
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var spinner = document.getElementById('loadingSpinner');
+            spinner.classList.add('hidden');
+        });
+
         function confirmLogout(event) {
             event.preventDefault();
             if (confirm('Are you sure you want to log out?')) {
@@ -27,6 +51,12 @@
     </script>
 @endpush
 @section('content')
+    <div id="loadingSpinner" class="loading-spinner d-flex justify-content-center align-items-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
     <!--================Banner Area =================-->
     <section class="banner_area">
         <div id="bannerCarousel" class="carousel slide" data-ride="carousel" style="padding-top: 5%;">
@@ -154,8 +184,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="facilities_item">
                                 <div class="facilities_img mb-2">
-                                    <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}" alt="{{ $item->nama }}"
-                                        class="img-fluid img-thumbnail zoom-image">
+                                    <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}"
+                                        alt="{{ $item->nama }}" class="img-fluid img-thumbnail zoom-image">
                                 </div>
                                 <h4>{{ $item->nama }}</h4>
                                 <p id="deskripsi-{{ $item->id }}">

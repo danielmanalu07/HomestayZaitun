@@ -25,11 +25,14 @@
         <section class="sign-in">
             <div class="container">
                 <div class="signin-content">
-                    <div class="signin-image">
-                        <figure><img src="{{ asset('Customer/Auth/images/signin-image.jpg') }}" alt="sing up image">
-                        </figure>
-                        <a href="{{ route('register.user') }}" class="signup-image-link">Create an account</a>
-                    </div>
+                    <a href="{{ route('home') }}">
+                        <div class="signin-image">
+                            <figure style="background-color: purple; border-radius:5%;"><img
+                                    src="{{ asset('img/logo.png') }}" alt="sing up image">
+                            </figure>
+                            <a href="{{ route('register.user') }}" class="signup-image-link">Create an account</a>
+                        </div>
+                    </a>
 
                     <div class="signin-form">
                         <h2 class="form-title">Sign in</h2>

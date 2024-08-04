@@ -47,6 +47,7 @@ class BookingController extends Controller
             }
 
             $existingBooking = Booking::where('id_kamar', $idKamar)
+                ->whereIn('status', ['Belum Dikonfirmasi', 'Disetujui'])
                 ->where(function ($query) use ($checkIn, $checkOut) {
                     $query->whereBetween('check_in', [$checkIn, $checkOut])
                         ->orWhereBetween('check_out', [$checkIn, $checkOut])
@@ -78,6 +79,37 @@ class BookingController extends Controller
             return redirect()->route('mybooking')->with('success', 'Berhasil melakukan pesanan');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Terjadi Kesalahan saat melakukan pesanan: ' . $th->getMessage());
+        }
+    }
+
+    public function DetailBooking($id)
+    {
+        $booking = Booking::findOrFail($id);
+        return view('User.Booking.DetailMyBooking', compact('booking'));
+    }
+
+    public function PaymentProof(Request $request, string $id)
+    {
+        $request->validate([
+            'paymentProof' => 'required|mimes:png,jpg,jpeg',
+        ]);
+
+        try {
+            $booking = Booking::findOrFail($id);
+            if ($request->hasFile('paymentProof')) {
+                $file = $request->file('paymentProof');
+                $fileName = 'payment_' . $id . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('Customer/Bukti_Pembayaran'), $fileName);
+
+                $booking->bukti_pembayaran = $fileName;
+                $booking->save();
+
+                return redirect()->back()->with('success', 'Berhasil Mengupload Bukti Pembayaran');
+            } else {
+                return redirect()->back()->with('error', 'File tidak ditemukan');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Mengupload Bukti Pembayaran');
         }
     }
 

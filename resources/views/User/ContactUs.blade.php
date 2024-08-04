@@ -55,11 +55,11 @@
         <div class="row">
             <div class="col-md-4 contact-info">
                 <h4>Email</h4>
-                <p><i class="fas fa-envelope"></i> zaitunhomesta100y@gmail.com</p>
+                <p><i class="fa fa-envelope" aria-hidden="true"></i> zaitunhomesta100y@gmail.com</p>
                 <h4>No Hp</h4>
-                <p><i class="fas fa-phone"></i> +62889107654</p>
+                <p><i class="fa fa-phone-square" aria-hidden="true"></i> +62889107654</p>
                 <h4>Alamat</h4>
-                <p><i class="fas fa-map-marker-alt"></i> Balige, Sumatera Utara</p>
+                <p><i class="fa fa-map-marker" aria-hidden="true"></i> Balige, Sumatera Utara</p>
             </div>
             <div class="col-md-8" id="map-container">
                 <iframe

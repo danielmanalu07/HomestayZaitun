@@ -85,4 +85,72 @@ class AdminController extends Controller
         $bookings = Booking::all();
         return view('Admin.Booking.DataBooking', compact('bookings'));
     }
+
+    public function filterStatus(Request $request)
+    {
+        $status = $request->input('status');
+
+        $query = Booking::query();
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        $bookings = $query->with(['user', 'kamar'])->get();
+
+        return view('Admin.Booking.DataBooking', compact('bookings'));
+    }
+
+    public function RejectBooking(Request $request, string $id)
+    {
+        $request->validate([
+            'catatan' => 'required',
+        ]);
+        $bookings = Booking::find($id);
+
+        $bookings->catatan = $request->input('catatan');
+        $bookings->status = 'Ditolak';
+
+        $bookings->save();
+        return redirect()->back()->with('success', 'Pesanan Berhasil Ditolak');
+    }
+
+    public function ApproveBooking(string $id)
+    {
+        try {
+            $booking = Booking::findOrFail($id);
+
+            if ($booking->status == 'Menunggu Konfirmasi' && $booking->bukti_pembayaran != null) {
+                $booking->status = 'Disetujui';
+                $kamar = Kamar::findOrFail($booking->id_kamar);
+                $kamar->view += $booking->jumlah_orang;
+                $kamar->save();
+                $booking->save();
+
+                return redirect()->back()->with('success', 'Pesanan Berhasil Disetujui');
+            } else {
+                return redirect()->back()->with('error', 'Tidak dapat menyetujui pesanan. Pastikan status pesanan adalah "Menunggu Konfirmasi" dan bukti pembayaran sudah ada.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi Kesalahan saat menyetujui pesanan');
+        }
+    }
+
+    public function CompletedBooking(string $id)
+    {
+        try {
+            $booking = Booking::findOrFail($id);
+
+            if ($booking->status == 'Disetujui') {
+                $booking->status = 'Selesai';
+                $booking->save();
+                return redirect()->back()->with('success', 'Pesanan Berhasil Diselesaikan');
+            } else {
+                return redirect()->back()->with('error', 'Tidak dapat menyelesaikan pesanan. Pastikan status pesanan adalah "Menunggu Konfirmasi" dan bukti pembayaran sudah ada.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi Kesalahan saat menyelesaikan pesanan');
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
-<header class="header_area" style="background-color: skyblue;">
+<header class="header_area" style="background-color: rgb(165, 8, 165);">
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: skyblue;">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(165, 8, 165);">
             <a class="navbar-brand logo_h" href="">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo" width="150px" height="100px">
             </a>
@@ -9,16 +9,18 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse offset text-dark" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse offset text-white" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('room') }}">Room</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('fasilitas') }}">Fasilitas</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('contactus') }}">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('home') }}">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('room') }}">Room</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('fasilitas') }}">Fasilitas</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white" href="{{ route('contactus') }}">Contact Us</a>
+                    </li>
 
                     @auth('admin')
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-user"></i> {{ Auth::guard('admin')->user()->username }}
                             </a>
@@ -29,9 +31,10 @@
                             </div>
                         </li>
                         @elseauth('user')
-                        <li class="nav-item"><a class="nav-link" href="{{ route('mybooking') }}">My Booking</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" href="{{ route('mybooking') }}">My Booking</a>
+                        </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-user"></i> {{ Auth::guard('user')->user()->nama_lengkap }}
                             </a>
@@ -42,19 +45,19 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="notificationDropdown"
+                                role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-bell"></i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown">
-                                <a class="dropdown-item" href="#">Notifikasi 1</a>
+                            <div class="dropdown-menu dropdown-menu-right " aria-labelledby="notificationDropdown">
+                                <a class="dropdown-item " href="#">Notifikasi 1</a>
                                 <a class="dropdown-item" href="#">Notifikasi 2</a>
                                 <a class="dropdown-item" href="#">Notifikasi 3</a>
                             </div>
                         </li>
                     @else
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-user"></i>
                             </a>
