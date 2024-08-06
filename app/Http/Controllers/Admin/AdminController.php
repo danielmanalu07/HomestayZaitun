@@ -11,6 +11,8 @@ use App\Models\Fasilitas;
 use App\Models\Gallery;
 use App\Models\Kamar;
 use App\Models\KategoriKamar;
+use App\Models\User;
+use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +49,27 @@ class AdminController extends Controller
         $konten = Content1::count();
         $diskon = Diskon::count();
         $bookings = Booking::count();
-        return view('Admin.Dashboard', compact('kategori_kamars', 'fasilitas', 'carousels', 'kamars', 'galleries', 'konten', 'diskon', 'bookings'));
+
+        $users = User::get();
+        $notifications = [];
+
+        foreach ($users as $user) {
+            $notif = $user->notifications()
+                ->where('data->id', $user->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new UserNotification($user);
+                $user->notify($notification);
+            } else {
+                $notifications[] = $notif;
+            }
+        }
+
+        return view('Admin.Dashboard', compact(
+            'kategori_kamars', 'fasilitas', 'carousels', 'kamars', 'galleries',
+            'konten', 'diskon', 'bookings', 'notifications'
+        ));
     }
 
     public function Logout()
