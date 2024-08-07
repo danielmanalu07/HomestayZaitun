@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Diskon;
 use App\Models\Gallery;
 use App\Models\Kamar;
 use App\Models\KategoriKamar;
+use App\Notifications\BookingNotification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
@@ -17,6 +20,18 @@ class RoomController extends Controller
 
         foreach ($kategoris as $kategori) {
             $kategori->average_rating = $this->getAverageRating($kategori->id);
+        }
+
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
         }
 
         return view('User.Room.ViewRoom', compact('kategoris'));
@@ -43,6 +58,18 @@ class RoomController extends Controller
         $diskons = [];
         foreach ($kamars as $kamar) {
             $diskons[$kamar->id] = Diskon::where('id_kamar', $kamar->id)->get();
+        }
+
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
         }
         return view('User.Room.DetailRoom', compact('kamars', 'galleries', 'diskons'));
     }

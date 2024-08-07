@@ -25,6 +25,7 @@ Route::put('/submitted-rating/{id}', [UserController::class, 'submitRating'])->n
 
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::match(['get', 'post'], 'login', 'AdminController@Login')->name('login.admin');
+    Route::get('/print-pdf', 'AdminController@printPDF')->name('admin.printPDF');
     Route::middleware(AdminMiddleware::class)->group(function () {
         Route::get('dashboard', 'AdminController@Dashboard')->name('dashboard.admin');
         Route::get('logout', 'AdminController@Logout')->name('logout.admin');
@@ -43,7 +44,8 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::put('/reject-booking/{id}', 'AdminController@RejectBooking')->name('reject.booking');
         Route::put('/approve-booking/{id}', 'AdminController@ApproveBooking')->name('approve.booking');
         Route::put('/completed-booking/{id}', 'AdminController@CompletedBooking')->name('complete.booking');
-
+        Route::get('/notification/{id}/mark-as-read', 'AdminController@markAsRead')->name('markasread.admin');
+        Route::get('/data-user', 'AdminController@DataUser')->name('data.user');
     });
 });
 
@@ -63,5 +65,6 @@ Route::prefix('/user')->namespace('App\Http\Controllers\User')->group(function (
         Route::get('profile', 'UserController@Profile')->name('user.profile');
         Route::put('update-profile', 'UserController@UpdateProfile')->name('user.update.profile');
         Route::put('ubah-password', 'UserController@UbahPassword')->name('user.ubah.password');
+        Route::get('/notification/{id}/mark-as-read', 'UserController@markAsRead')->name('markasread.user');
     });
 });

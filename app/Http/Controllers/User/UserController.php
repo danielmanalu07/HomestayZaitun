@@ -11,6 +11,7 @@ use App\Models\KategoriKamar;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Models\Verify_Users;
+use App\Notifications\BookingNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -201,6 +202,18 @@ class UserController extends Controller
         $carousel = Carousel::get();
         $fasilitas = Fasilitas::get();
         $kontents = Content1::get();
+
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
         return view('User.Home', compact('carousel', 'fasilitas', 'kategoris', 'kontents'));
     }
 
@@ -371,12 +384,34 @@ class UserController extends Controller
                 return redirect()->back()->with('error', 'Akun Belum Diverifikasi');
             }
         }
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
         return view('User.NewPassword');
     }
 
     public function Profile()
     {
         $user = Auth::guard('user')->user();
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
         return view('User.Auth.Profile', compact('user'));
     }
 
@@ -435,12 +470,34 @@ class UserController extends Controller
 
     public function ContactUs()
     {
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
         return view('User.ContactUs');
     }
 
     public function Fasilitas()
     {
         $fasilitas = Fasilitas::all();
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
         return view('User.Fasilitas', compact('fasilitas'));
     }
 
@@ -448,6 +505,17 @@ class UserController extends Controller
     {
         $user = Auth::guard('user')->user();
         $bookings = Booking::where('id_user', $user->id)->get();
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
         return view('User.Booking.MyBooking', compact('bookings'));
     }
 
@@ -475,6 +543,8 @@ class UserController extends Controller
             $query->where('status', $status);
         }
 
+        $query->where('id_user', Auth::guard('user')->user()->id);
+
         $bookings = $query->get();
 
         return view('User.Booking.MyBooking', compact('bookings'));
@@ -492,6 +562,15 @@ class UserController extends Controller
         $booking->catatan = $request->input('catatan');
         $booking->save();
         return redirect()->back()->with('success', 'Rating submitted successfully!');
+    }
+
+    public function markAsRead(string $id)
+    {
+        if ($id) {
+            Auth::guard('user')->user()->notifications()->where('id', $id)->first()->markAsRead();
+        }
+
+        return redirect()->back();
     }
 
 }

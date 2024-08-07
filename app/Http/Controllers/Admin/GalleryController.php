@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Gallery;
 use App\Models\Kamar;
+use App\Models\User;
+use App\Notifications\BookingNotification;
+use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -19,6 +24,30 @@ class GalleryController extends Controller
         try {
             $galleries = Gallery::all();
             $kamars = Kamar::all();
+            $users = User::get();
+
+            foreach ($users as $user) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $user->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new UserNotification($user);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
+            $bkgs = Booking::get();
+            foreach ($bkgs as $booking) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
             return view('Admin.Gallery.Index', compact('galleries', 'kamars'));
         } catch (\Throwable $th) {
             Log::error('Error fetching gallery data: ' . $th->getMessage());
@@ -34,6 +63,30 @@ class GalleryController extends Controller
     {
         try {
             $kamars = Kamar::all();
+            $users = User::get();
+
+            foreach ($users as $user) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $user->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new UserNotification($user);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
+            $bkgs = Booking::get();
+            foreach ($bkgs as $booking) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
             return view('Admin.Gallery.Create', compact('kamars'));
         } catch (\Throwable $th) {
             Log::error('Error displaying form creating gallery data: ' . $th->getMessage());

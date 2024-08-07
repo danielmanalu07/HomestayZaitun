@@ -48,11 +48,26 @@
                             <a class="nav-link dropdown-toggle text-white" href="#" id="notificationDropdown"
                                 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-bell"></i>
+                                <span
+                                    class="badge badge-danger">{{ Auth::guard('user')->user()->unreadNotifications->count() }}</span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right " aria-labelledby="notificationDropdown">
-                                <a class="dropdown-item " href="#">Notifikasi 1</a>
-                                <a class="dropdown-item" href="#">Notifikasi 2</a>
-                                <a class="dropdown-item" href="#">Notifikasi 3</a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown">
+                                @forelse (Auth::guard('user')->user()->unreadNotifications as $notification)
+                                    <a href="{{ route('mybooking') }}">
+                                        <div class="dropdown-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fa fa-circle mr-2" aria-hidden="true"></i>
+                                                <span>Pesanan mu telah {{ $notification->data['status'] }}</span>
+                                            </div>
+                                            <a href="{{ route('markasread.user', $notification->id) }}"
+                                                class="btn btn-sm btn-primary m-2" style="size: 5px">Mark as
+                                                Read</a>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                    </a>
+                                @empty
+                                    <a class="dropdown-item text-center" href="#">Tidak Ada Notifikasi</a>
+                                @endforelse
                             </div>
                         </li>
                     @else

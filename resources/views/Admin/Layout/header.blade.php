@@ -15,31 +15,58 @@
                 <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-bell"></i>
-                    <span class="notification">{{ count($notifications) }}</span>
+                    <span class="notification">{{ Auth::guard('admin')->user()->unreadNotifications->count() }}</span>
                 </a>
                 <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
                     <li>
                         <div class="dropdown-title">
-                            You have {{ count($notifications) }} new notification(s)
+                            You have {{ Auth::guard('admin')->user()->unreadNotifications->count() }} new
+                            notification(s)
                         </div>
                     </li>
                     <li>
                         <div class="notif-scroll scrollbar-outer">
                             <div class="notif-center">
-                                @foreach ($notifications as $notification)
-                                    <a href="#">
-                                        <div class="notif-icon notif-info">
-                                            <i class="fa fa-circle" aria-hidden="true"></i>
+                                @foreach (Auth::guard('admin')->user()->unreadNotifications as $notification)
+                                    @if ($notification->type === 'App\Notifications\UserNotification')
+                                        <a href="{{ route('data.user') }}">
+                                            <div class="pt-1 m-2">
+                                                <i class="fa fa-circle" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-content">
+                                                <span class="block">
+                                                    {{ $notification->data['nama_lengkap'] }} Melakukan Pendaftaran
+                                                </span>
+                                                <span class="time">
+                                                    {{ $notification->created_at->diffForHumans() }}
+                                                </span>
+                                            </div>
+                                        </a>
+                                        <div class="d-flex mx-4">
+                                            <a href="{{ route('markasread.admin', $notification->id) }}"
+                                                class="btn btn-sm btn-secondary">Mark
+                                                as Read</a>
                                         </div>
-                                        <div class="notif-content">
-                                            <span class="block">
-                                                {{ $notification->data['nama_lengkap'] }} Melakukan Pendaftaran
-                                            </span>
-                                            <span class="time">
-                                                {{ $notification->created_at->diffForHumans() }}
-                                            </span>
+                                    @elseif ($notification->type === 'App\Notifications\BookingNotification')
+                                        <a href="{{ route('data.booking') }}">
+                                            <div class="pt-1 m-2">
+                                                <i class="fa fa-circle" aria-hidden="true"></i>
+                                            </div>
+                                            <div class="notif-content">
+                                                <span class="block">
+                                                    {{ $notification->data['nama_user'] }} Melakukan Booking Ruangan
+                                                </span>
+                                                <span class="time">
+                                                    {{ $notification->created_at->diffForHumans() }}
+                                                </span>
+                                            </div>
+                                        </a>
+                                        <div class="d-flex mx-4">
+                                            <a href="{{ route('markasread.admin', $notification->id) }}"
+                                                class="btn btn-sm btn-secondary">Mark
+                                                as Read</a>
                                         </div>
-                                    </a>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>

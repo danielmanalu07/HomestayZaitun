@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Carousel;
+use App\Models\User;
+use App\Notifications\BookingNotification;
+use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -17,6 +22,30 @@ class CarouselController extends Controller
     {
         try {
             $carousels = Carousel::all();
+            $users = User::get();
+
+            foreach ($users as $user) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $user->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new UserNotification($user);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
+            $bkgs = Booking::get();
+            foreach ($bkgs as $booking) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
             return view('Admin.Carousel.Index', compact('carousels'));
         } catch (\Throwable $th) {
             Log::error('Error fetching fasilitas: ' . $th->getMessage());
@@ -30,6 +59,30 @@ class CarouselController extends Controller
     public function create()
     {
         try {
+            $users = User::get();
+
+            foreach ($users as $user) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $user->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new UserNotification($user);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
+            $bkgs = Booking::get();
+            foreach ($bkgs as $booking) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
             return view('Admin.Carousel.Create');
         } catch (\Throwable $th) {
             Log::error('Error display form created fasilitas: ' . $th->getMessage());

@@ -12,9 +12,11 @@ use App\Models\Gallery;
 use App\Models\Kamar;
 use App\Models\KategoriKamar;
 use App\Models\User;
+use App\Notifications\BookingNotification;
 use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -51,24 +53,51 @@ class AdminController extends Controller
         $bookings = Booking::count();
 
         $users = User::get();
-        $notifications = [];
 
         foreach ($users as $user) {
-            $notif = $user->notifications()
+            $notif = Auth::guard('admin')->user()->notifications()
                 ->where('data->id', $user->id)
                 ->first();
 
             if (!$notif) {
                 $notification = new UserNotification($user);
-                $user->notify($notification);
-            } else {
-                $notifications[] = $notif;
+                Auth::guard('admin')->user()->notify($notification);
             }
         }
 
+        $bkgs = Booking::get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
+
+        $usersData = User::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $bookingsData = Booking::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $revenueData = Booking::whereIn('status', ['Disetujui', 'Selesai'])
+            ->select(DB::raw('DATE(updated_at) as date'), DB::raw('sum(total_harga) as total'))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $years = range(date('Y'), date('Y') - 4);
+        $months = range(1, 12);
         return view('Admin.Dashboard', compact(
             'kategori_kamars', 'fasilitas', 'carousels', 'kamars', 'galleries',
-            'konten', 'diskon', 'bookings', 'notifications'
+            'konten', 'diskon', 'bookings', 'usersData', 'bookingsData', 'revenueData', 'years', 'months'
         ));
     }
 
@@ -80,7 +109,32 @@ class AdminController extends Controller
 
     public function Profile()
     {
+
         $admin = Auth::guard('admin')->user();
+        $users = User::get();
+
+        foreach ($users as $user) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $user->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new UserNotification($user);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
+
+        $bkgs = Booking::get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
         return view('Admin.profile', compact('admin'));
     }
 
@@ -98,6 +152,31 @@ class AdminController extends Controller
         }
         $admin->password = Hash::make($request->password);
         $admin->save();
+
+        $users = User::get();
+
+        foreach ($users as $user) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $user->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new UserNotification($user);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
+
+        $bkgs = Booking::get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
         return redirect()->back()->with('success', "Password Berhasil Diubah");
 
     }
@@ -105,6 +184,30 @@ class AdminController extends Controller
     public function DataBooking()
     {
         $bookings = Booking::all();
+        $users = User::get();
+
+        foreach ($users as $user) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $user->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new UserNotification($user);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
+
+        $bkgs = Booking::get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
         return view('Admin.Booking.DataBooking', compact('bookings'));
     }
 
@@ -173,6 +276,44 @@ class AdminController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi Kesalahan saat menyelesaikan pesanan');
         }
+    }
+
+    public function DataUser()
+    {
+        $users = User::get();
+
+        foreach ($users as $user) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $user->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new UserNotification($user);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
+
+        $bkgs = Booking::get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('admin')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('admin')->user()->notify($notification);
+            }
+        }
+        return view('Admin.User.DataUser', compact('users'));
+    }
+
+    public function markAsRead(string $id)
+    {
+        if ($id) {
+            Auth::guard('admin')->user()->notifications()->where('id', $id)->first()->markAsRead();
+        }
+
+        return redirect()->back();
     }
 
 }

@@ -184,6 +184,22 @@
                     </div>
                 </li>
                 <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#customer">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        <p>Akun Customer</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="customer">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{{ route('data.user') }}">
+                                    <span class="sub-item">Lihat Data Akun Customer</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#bookings">
                         <i class="fa fa-users" aria-hidden="true"></i>
                         <p>User Bookings</p>

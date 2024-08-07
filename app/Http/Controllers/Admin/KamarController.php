@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Gallery;
 use App\Models\Kamar;
 use App\Models\KategoriKamar;
+use App\Models\User;
+use App\Notifications\BookingNotification;
+use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class KamarController extends Controller
@@ -23,6 +28,32 @@ class KamarController extends Controller
             foreach ($kamars as $kamar) {
                 $galleries[$kamar->id] = Gallery::where('id_kamar', $kamar->id)->get();
             }
+
+            $users = User::get();
+
+            foreach ($users as $user) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $user->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new UserNotification($user);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
+            $bkgs = Booking::get();
+            foreach ($bkgs as $booking) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
             return view('Admin.Kamar.Index', compact('kamars', 'kategori_kamars', 'galleries'));
         } catch (\Throwable $th) {
             Log::error('Error fetching kamars data: ' . $th->getMessage());
@@ -54,6 +85,32 @@ class KamarController extends Controller
     {
         try {
             $kategori_kamars = KategoriKamar::all();
+
+            $users = User::get();
+
+            foreach ($users as $user) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $user->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new UserNotification($user);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
+            $bkgs = Booking::get();
+            foreach ($bkgs as $booking) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
+
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
+            }
+
             return view('Admin.Kamar.Create', compact('kategori_kamars'));
         } catch (\Throwable $th) {
             Log::error('Error displaying form create kamars data: ' . $th->getMessage());

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Gallery;
 use App\Models\Kamar;
+use App\Notifications\BookingNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +19,18 @@ class BookingController extends Controller
         $gallery = Gallery::where('id_kamar', $roomId)->get();
 
         $user = Auth::guard('user')->user();
+
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
 
         return view('User.Room.Booking', compact('kamar', 'gallery', 'user'));
     }
@@ -85,6 +98,18 @@ class BookingController extends Controller
     public function DetailBooking($id)
     {
         $booking = Booking::findOrFail($id);
+
+        $bkgs = Booking::where('status', 'Disetujui')->get();
+        foreach ($bkgs as $booking) {
+            $notif = Auth::guard('user')->user()->notifications()
+                ->where('data->id', $booking->id)
+                ->first();
+
+            if (!$notif) {
+                $notification = new BookingNotification($booking);
+                Auth::guard('user')->user()->notify($notification);
+            }
+        }
         return view('User.Booking.DetailMyBooking', compact('booking'));
     }
 

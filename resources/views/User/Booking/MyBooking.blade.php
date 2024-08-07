@@ -139,10 +139,10 @@
                                     <a href="{{ route('detail.mybooking', $booking->id) }}"
                                         class="btn btn-primary btn-sm">Detail Pesanan</a>
                                     @if ($booking->status == 'Menunggu Konfirmasi')
-                                        <button class="btn btn-danger btn-sm btn-cancel my-2" data-id="{{ $booking->id }}"
+                                        <button class="btn btn-danger btn-sm btn-cancel" data-id="{{ $booking->id }}"
                                             data-toggle="modal" data-target="#cancelModal">Batalkan Pesanan</button>
                                     @else
-                                        <button class="btn btn-danger btn-sm disabled my-2">Batalkan Pesanan</button>
+                                        <button class="btn btn-danger btn-sm disabled">Batalkan Pesanan</button>
                                     @endif
                                     @if ($booking->status == 'Selesai' && $booking->rating == null)
                                         <button type="button" class="btn btn-info btn-sm btn-rate"
