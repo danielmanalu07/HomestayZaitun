@@ -70,6 +70,11 @@
             font-weight: bold;
         }
 
+        .availabling {
+            color: orange;
+            font-weight: bold;
+        }
+
         .unavailable {
             color: red;
             font-weight: bold;
@@ -193,6 +198,8 @@
                                     <strong>Status:</strong>
                                     @if ($room->status == 'Tersedia')
                                         <span class="available">Tersedia</span>
+                                    @elseif ($room->status == 'Sedang Digunakan')
+                                        <span class="availabling">Sedang Digunakan</span>
                                     @else
                                         <span class="unavailable">Tidak Tersedia</span>
                                     @endif
@@ -214,7 +221,7 @@
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <span class="close-btn" data-bs-dismiss="modal">&times;</span>
+                {{-- <span class="close-btn" data-bs-dismiss="modal">&times;</span> --}}
                 <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner" id="carouselImages"></div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel"

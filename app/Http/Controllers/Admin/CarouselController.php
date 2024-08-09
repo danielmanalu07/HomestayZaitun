@@ -98,7 +98,7 @@ class CarouselController extends Controller
         try {
             $request->validate([
                 'gambar' => 'required|mimes:png,jpg,jpeg',
-                'text' => 'required',
+                'text' => 'nullable',
             ]);
             $fileName = time() . '.' . $request->file('gambar')->extension();
             $request->file('gambar')->move(public_path('gambar/carousel'), $fileName);
@@ -139,7 +139,7 @@ class CarouselController extends Controller
         try {
             $request->validate([
                 'gambar' => 'nullable|mimes:png,jpg,jpeg' . $id,
-                'text' => 'required',
+                'text' => 'nullable',
             ]);
 
             $carousel = Carousel::findOrFail($id);

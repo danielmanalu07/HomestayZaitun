@@ -62,28 +62,28 @@ class KategoriKamarController extends Controller
         try {
             $users = User::get();
 
-        foreach ($users as $user) {
-            $notif = Auth::guard('admin')->user()->notifications()
-                ->where('data->id', $user->id)
-                ->first();
+            foreach ($users as $user) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $user->id)
+                    ->first();
 
-            if (!$notif) {
-                $notification = new UserNotification($user);
-                Auth::guard('admin')->user()->notify($notification);
+                if (!$notif) {
+                    $notification = new UserNotification($user);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
             }
-        }
 
-        $bkgs = Booking::get();
-        foreach ($bkgs as $booking) {
-            $notif = Auth::guard('admin')->user()->notifications()
-                ->where('data->id', $booking->id)
-                ->first();
+            $bkgs = Booking::get();
+            foreach ($bkgs as $booking) {
+                $notif = Auth::guard('admin')->user()->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
 
-            if (!$notif) {
-                $notification = new BookingNotification($booking);
-                Auth::guard('admin')->user()->notify($notification);
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    Auth::guard('admin')->user()->notify($notification);
+                }
             }
-        }
             return view('Admin.KategoriKamar.Create');
         } catch (\Throwable $th) {
             Log::error('Error displaying create form: ' . $th->getMessage());
@@ -107,7 +107,7 @@ class KategoriKamarController extends Controller
 
             $kategori = new KategoriKamar();
             $kategori->nama = $request->input('nama');
-            $kategori->deskripsi = $request->input('deskripsi');
+            $kategori->deskripsi = strip_tags($request->input('deskripsi'));
             $kategori->gambar = $fileName;
 
             $kategori->save();

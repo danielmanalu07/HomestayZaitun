@@ -74,7 +74,7 @@
                 </div>
                 <div class="modal-body">
                     <p><strong>Nama:</strong> <span id="modalNama"></span></p>
-                    <p><strong>Deskripsi:</strong> <span id="modalDeskripsi"></span></p>
+                    <p><strong>Deskripsi:</strong> <br><span id="modalDeskripsi"></span></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

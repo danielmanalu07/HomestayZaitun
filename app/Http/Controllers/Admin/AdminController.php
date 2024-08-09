@@ -249,6 +249,7 @@ class AdminController extends Controller
                 $booking->status = 'Disetujui';
                 $kamar = Kamar::findOrFail($booking->id_kamar);
                 $kamar->view += $booking->jumlah_orang;
+                $kamar->status = 'Sedang Digunakan';
                 $kamar->save();
                 $booking->save();
 
@@ -268,6 +269,9 @@ class AdminController extends Controller
 
             if ($booking->status == 'Disetujui') {
                 $booking->status = 'Selesai';
+                $kamar = Kamar::findOrFail($booking->id_kamar);
+                $kamar->status = 'Tersedia';
+                $kamar->save();
                 $booking->save();
                 return redirect()->back()->with('success', 'Pesanan Berhasil Diselesaikan');
             } else {

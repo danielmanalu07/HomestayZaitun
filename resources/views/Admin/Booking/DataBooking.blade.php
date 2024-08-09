@@ -161,7 +161,11 @@
                                     <a href="#" class="btn btn-danger btn-sm my-2 disabled"><i class="fa fa-times"
                                             aria-hidden="true"></i> Tolak</a>
                                 @endif
-                                @if ($booking->status == 'Ditolak' || $booking->status == 'Menunggu Konfirmasi' || $booking->status == 'Dibatalkan')
+                                @if (
+                                    $booking->status == 'Ditolak' ||
+                                        $booking->status == 'Menunggu Konfirmasi' ||
+                                        $booking->status == 'Dibatalkan' ||
+                                        $booking->status == 'Selesai')
                                     <a href="#" class="btn btn-info btn-sm disabled" title="Not available">
                                         <i class="fa fa-flag-checkered" aria-hidden="true"></i> Complete
                                     </a>

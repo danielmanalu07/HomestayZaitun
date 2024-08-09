@@ -33,6 +33,39 @@
             opacity: 0;
             visibility: hidden;
         }
+
+        .facilities_img img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .facilities_item {
+            margin-bottom: 15px;
+        }
+
+        /* Modal styles */
+        .modal-dialog-centered {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .modal-body {
+            padding: 0;
+        }
+
+        .modal-content {
+            background: transparent;
+            border: none;
+        }
+
+        .modal-img {
+            width: 100%;
+            height: auto;
+        }
     </style>
 @endpush
 @push('js')
@@ -40,6 +73,25 @@
         document.addEventListener("DOMContentLoaded", function() {
             var spinner = document.getElementById('loadingSpinner');
             spinner.classList.add('hidden');
+
+            // Handle "More" button click
+            $('#descriptionModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var nama = button.data('nama'); // Extract info from data-* attributes
+                var deskripsi = button.data('deskripsi');
+
+                // Update the modal's content
+                var modal = $(this);
+                modal.find('#modalNama').text(nama);
+                modal.find('#modalDeskripsi').text(deskripsi);
+            });
+
+            // Handle image click to show in modal
+            $('.facilities_img img').on('click', function() {
+                var src = $(this).attr('src');
+                $('#imageModal').find('img').attr('src', src);
+                $('#imageModal').modal('show');
+            });
         });
 
         function confirmLogout(event) {
@@ -148,7 +200,7 @@
                                             <div class="facilities_item">
                                                 <div class="facilities_img mb-2">
                                                     <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}"
-                                                        alt="{{ $item->nama }}"
+                                                        alt="{{ $item->nama }}" width="300px" height="150px"
                                                         class="img-fluid img-thumbnail zoom-image">
                                                 </div>
                                                 <h4>{{ $item->nama }}</h4>
@@ -203,6 +255,41 @@
             @endif
         </div>
     </section>
+
+    <!-- Image Zoom Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="" alt="Zoomed Image" class="modal-img">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Description -->
+    <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="descriptionModalLabel">Fasilitas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4 id="modalNama"></h4>
+                    <p id="modalDeskripsi"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--================ Facilities Area  =================-->
 
 
@@ -211,9 +298,7 @@
     <section class="latest_blog_area section_gap">
         <div class="container">
             <div class="section_title text-center">
-                <h2 class="title_color">Informasi Tambahan</h2>
-                <p>The French Revolution constituted for the conscience of the dominant aristocratic class a fall from...
-                </p>
+                <h2 class="title_color">About Us</h2>
             </div>
             <div class="row mb_30">
                 @foreach ($kontents as $konten)

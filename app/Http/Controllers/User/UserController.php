@@ -59,7 +59,7 @@ class UserController extends Controller
                     'user_id' => $user->id,
                     'token' => $token,
                     'code' => $code,
-                    'expires_at' => Carbon::now()->addMinutes(1),
+                    'expires_at' => Carbon::now()->addMinutes(5),
                     'verification_date' => Carbon::now(),
                 ]);
 
@@ -82,7 +82,7 @@ class UserController extends Controller
                 return redirect('/user/verification-code-email')->with('success', 'Berhasil Melakukan Registrasi. Check Email Untuk Melihat Kode Verifikasi Anda');
             } catch (\Throwable $th) {
                 $user->delete();
-                return redirect()->back()->with('error', 'Terjadi Kesalahan Verifikasi Email. Silahkan Coba Lagi');
+                return redirect()->back()->with('error', 'Terjadi Kesalahan Verifikasi Email. Silahkan Coba Lagi' . $th);
             }
         }
         return view('User.Auth.Register');
@@ -143,7 +143,7 @@ class UserController extends Controller
             $verify_user->token = $token;
             $verify_user->code = $code;
             $verify_user->verification_date = Carbon::now();
-            $verify_user->expires_at = Carbon::now()->addMinutes(1);
+            $verify_user->expires_at = Carbon::now()->addMinutes(5);
             $verify_user->save();
 
             session(['code' => $code]);

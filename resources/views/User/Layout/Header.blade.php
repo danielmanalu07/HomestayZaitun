@@ -1,6 +1,6 @@
-<header class="header_area" style="background-color: rgb(165, 8, 165);">
+<header class="header_area" style="background-color: #2C3E50; color: #FFFFFF; padding: 10px;">
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(165, 8, 165);">
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2C3E50;">
             <a class="navbar-brand logo_h" href="">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo" width="150px" height="100px">
             </a>
@@ -53,7 +53,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdown">
                                 @forelse (Auth::guard('user')->user()->unreadNotifications as $notification)
-                                    <a href="{{ route('mybooking') }}">
+                                    <a href="{{ route('mybooking') }}" class="text-dark">
                                         <div class="dropdown-item d-flex justify-content-between align-items-center">
                                             <div>
                                                 <i class="fa fa-circle mr-2" aria-hidden="true"></i>

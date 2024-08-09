@@ -30,7 +30,7 @@
         .facility img {
             width: 100%;
             max-width: 400px;
-            height: auto;
+            height: 300px;
             border-radius: 10px;
             transition: transform 0.3s ease-in-out;
         }
@@ -57,7 +57,7 @@
 @endpush
 @section('content')
     <div class="container facilities-section">
-        <div class="contact-heading pt-5 text-center">
+        <div class="contact-heading text-center" style="padding-top: 6%;">
             <h2>Fasilitas</h2>
         </div>
         <div class="row">

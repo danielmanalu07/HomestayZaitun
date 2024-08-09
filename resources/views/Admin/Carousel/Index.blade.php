@@ -99,8 +99,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editText" class="form-label">Text Carousel</label>
-                            <textarea class="form-control" name="text" id="editText" rows="3" placeholder="Masukkan Text Carousel"
-                                required></textarea>
+                            <textarea class="form-control" name="text" id="editText" rows="3" placeholder="Masukkan Text Carousel"></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

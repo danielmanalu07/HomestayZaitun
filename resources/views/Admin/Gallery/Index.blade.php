@@ -3,8 +3,8 @@
 @push('css')
     <style>
         .gallery-images img {
-            width: 100%;
-            height: auto;
+            width: 150px;
+            height: 100px;
             margin-bottom: 10px;
         }
 

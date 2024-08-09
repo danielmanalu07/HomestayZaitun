@@ -196,6 +196,10 @@
                             <p id="phone">{{ $booking->user->phone }}</p>
                         </div>
                         <div class="detail-item">
+                            <label for="phone">Total Harga:</label>
+                            <p id="phone">Rp {{ number_format($booking->total_harga) }}</p>
+                        </div>
+                        <div class="detail-item">
                             <label for="date">Tanggal Check-in:</label>
                             <p id="date">{{ $booking->check_in }}</p>
                         </div>

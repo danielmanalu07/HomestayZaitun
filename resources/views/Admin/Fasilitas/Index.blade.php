@@ -39,7 +39,7 @@
                                     class="card-img-top img-thumbnail" alt="image_fasilitas">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $item->nama }}</h5>
-                                    <p class="card-text">{{ Str::limit($item->deskripsi, 40) }}</p>
+                                    <p class="card-text">{{ Str::limit($item->deskripsi, 30) }}</p>
                                     <button class="btn btn-info btn-detail" data-nama="{{ $item->nama }}"
                                         data-deskripsi="{{ $item->deskripsi }}"
                                         data-gambar="{{ asset('gambar/fasilitas/' . $item->gambar) }}"><i
