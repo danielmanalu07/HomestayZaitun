@@ -214,14 +214,17 @@ class UserController extends Controller
         $kontents = Content1::get();
 
         $bkgs = Booking::where('status', 'Disetujui')->get();
-        foreach ($bkgs as $booking) {
-            $notif = Auth::guard('user')->user()->notifications()
-                ->where('data->id', $booking->id)
-                ->first();
+        if (Auth::guard('user')->check()) {
+            $user = Auth::guard('user')->user();
+            foreach ($bkgs as $booking) {
+                $notif = $user->notifications()
+                    ->where('data->id', $booking->id)
+                    ->first();
 
-            if (!$notif) {
-                $notification = new BookingNotification($booking);
-                Auth::guard('user')->user()->notify($notification);
+                if (!$notif) {
+                    $notification = new BookingNotification($booking);
+                    $user->notify($notification);
+                }
             }
         }
         return view('User.Home', compact('carousel', 'fasilitas', 'kategoris', 'kontents'));

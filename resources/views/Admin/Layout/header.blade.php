@@ -4,12 +4,6 @@
 @endpush
 <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
     <div class="container-fluid">
-        <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-            <div class="input-group">
-                <a href="{{ route('home') }}" class="btn btn-sm btn-info">Home Page</a>
-            </div>
-        </nav>
-
         <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
             <li class="nav-item topbar-icon dropdown hidden-caret">
                 <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"

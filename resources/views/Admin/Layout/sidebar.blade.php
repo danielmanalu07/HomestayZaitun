@@ -2,7 +2,7 @@
     <div class="sidebar-logo">
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
-            <a href="" class="logo mt-2">
+            <a href="{{ route('home') }}" class="logo mt-2">
                 <img src="{{ asset('img/logo.png') }}" alt="navbar brand" class="navbar-brand" height="80"
                     width="150" />
             </a>

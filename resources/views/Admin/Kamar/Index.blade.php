@@ -57,8 +57,7 @@
                                 <td>{{ $item->kategoriKamar->nama }}</td>
                                 <td>
                                     <button type="button" class="btn btn-secondary btn-view-images"
-                                        data-id="{{ $item->id }}" data-bs-toggle="modal"
-                                        data-bs-target="#viewImagesModal">
+                                        data-id="{{ $item->id }}">
                                         Lihat Gambar
                                     </button>
                                 </td>
@@ -81,6 +80,37 @@
             </div>
         </div>
     </div>
+
+    {{-- Modal View Gambar --}}
+    <div class="modal fade" id="viewImagesModal" tabindex="-1" aria-labelledby="viewImagesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewImagesModalLabel">Gambar Kamar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="carouselImages" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner" id="carouselImagesInner">
+                            {{-- Gambar-gambar akan dimuat di sini --}}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselImages"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- End Modal View Gambar --}}
+
 
     {{-- Edit Data View --}}
     <div class="modal fade" id="editData" tabindex="-1" aria-labelledby="editDataLabel" aria-hidden="true">
@@ -155,35 +185,6 @@
         </div>
     </div>
     {{-- End Delete Confirmation View --}}
-
-    {{-- View Images Modal --}}
-    <div class="modal fade" id="viewImagesModal" tabindex="-1" aria-labelledby="viewImagesModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewImagesModalLabel">Lihat Gambar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="carouselImages" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner" id="carousel-inner"></div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselImages"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- End View Images Modal --}}
 @endsection
 
 @push('js')
@@ -226,45 +227,45 @@
                     deleteModal.show();
                 });
             });
+        });
 
+        document.addEventListener('DOMContentLoaded', function() {
             var viewImageButtons = document.querySelectorAll('.btn-view-images');
 
             viewImageButtons.forEach(function(button) {
                 button.addEventListener('click', function() {
                     var id = this.dataset.id;
-                    fetch(`/admin/kamar/${id}/images`)
+
+                    fetch('/admin/kamar/' + id + '/images')
                         .then(response => response.json())
                         .then(data => {
-                            var carouselInner = document.getElementById('carousel-inner');
+                            var carouselInner = document.getElementById('carouselImagesInner');
                             carouselInner.innerHTML = '';
-                            var hasImages = false;
 
-                            ['gambar_utama', 'gambar2', 'gambar3', 'gambar4'].forEach(function(
-                                key, index) {
-                                if (data[key]) {
-                                    hasImages = true;
-                                    var div = document.createElement('div');
-                                    div.className = 'carousel-item' + (index === 0 ?
-                                        ' active' : '');
-                                    var img = document.createElement('img');
-                                    img.src = data[key];
-                                    img.className =
-                                        'd-block w-100 img-fluid';
-                                    div.appendChild(img);
-                                    carouselInner.appendChild(div);
-                                }
-                            });
+                            // Filter out null images and create carousel items
+                            var images = Object.values(data).filter(image => image !== null);
 
-                            if (!hasImages) {
-                                var div = document.createElement('div');
-                                div.className = 'carousel-item active';
-                                div.innerHTML =
-                                    '<p class="text-center">Tidak ada gambar tersedia</p>';
-                                carouselInner.appendChild(div);
+                            if (images.length > 0) {
+                                images.forEach(function(image, index) {
+                                    var activeClass = index === 0 ? 'active' : '';
+                                    var carouselItem = `
+                                <div class="carousel-item ${activeClass}">
+                                    <img src="${image}" class="d-block w-100" alt="Gambar Kamar">
+                                </div>
+                            `;
+                                    carouselInner.innerHTML += carouselItem;
+                                });
+                            } else {
+                                carouselInner.innerHTML =
+                                    '<div class="carousel-item active"><p class="text-center">Tidak ada gambar tersedia.</p></div>';
                             }
 
-                            var carousel = new bootstrap.Carousel(document.getElementById(
-                                'carouselImages'));
+                            var viewImagesModal = new bootstrap.Modal(document.getElementById(
+                                'viewImagesModal'));
+                            viewImagesModal.show();
+                        })
+                        .catch(error => {
+                            console.error('Error fetching images:', error);
                         });
                 });
             });

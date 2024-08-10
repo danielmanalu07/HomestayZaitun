@@ -64,7 +64,7 @@ class KamarController extends Controller
 
     public function getImages($id)
     {
-        $gallery = Gallery::find($id);
+        $gallery = Gallery::where('id_kamar', $id)->first();
         if (!$gallery) {
             return response()->json([]);
         }
