@@ -16,7 +16,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -42,10 +44,18 @@ class UserController extends Controller
 
                 $profile = null;
                 if ($request->hasFile('photo')) {
+                    // Remove the old file if it exists
+                    if ($user->photo && Storage::exists('public/' . $user->photo)) {
+                        Storage::delete('public/' . $user->photo);
+                    }
+
+                    // Store the new file
                     $profile = $request->nama_lengkap . '.' . $request->file('photo')->extension();
-                    $request->file('photo')->move(public_path('Customer/Profile'), $profile);
+                    $filePath = $request->file('photo')->storeAs('public/Customer/Profile', $profile);
+
+                    // Update the user's profile photo path
+                    $user->photo = str_replace('public/', '', $filePath);
                 }
-                $user->photo = $profile ?? '';
                 $user->save();
             } catch (\Throwable $th) {
                 return redirect()->back()->with('error', 'Terjadi Kesalahan Pada Saat Penyimpanan Data.');
@@ -430,19 +440,26 @@ class UserController extends Controller
             $user->phone = $request->input('phone');
             $user->alamat = $request->input('alamat');
 
-            $photoProfile = null;
             if ($request->hasFile('photo')) {
+                // Delete old profile photo if it exists
+                if ($user->photo && Storage::exists('public/' . $user->photo)) {
+                    Storage::delete('public/' . $user->photo);
+                }
+
+                // Store the new photo
                 $photoProfile = $request->nama_lengkap . '.' . $request->file('photo')->extension();
-                $request->file('photo')->move(public_path('Customer/Profile'), $photoProfile);
+                $filePath = $request->file('photo')->storeAs('public/Customer/Profile', $photoProfile);
+
+                // Save the relative file path
+                $user->photo = str_replace('public/', '', $filePath);
             }
-            $user->photo = $photoProfile ?? '';
+
             $user->save();
             return redirect()->back()->with('success', 'Berhasil Mengupdate Data Profile');
         } catch (\Throwable $th) {
+            Log::error('Error updating profile: ' . $th->getMessage());
             return redirect()->back()->with('error', 'Terjadi Kesalahan Mengupdate Data Profile');
-
         }
-
     }
 
     public function UbahPassword(Request $request)

@@ -106,10 +106,10 @@
         </div>
         <div class="booking-images">
             @foreach ($gallery as $image)
-                <img src="{{ asset('gambar/gallery/gambar_utama/' . $image->gambar_utama) }}" alt="Room Image">
-                <img src="{{ asset('gambar/gallery/gambar2/' . $image->gambar2) }}" alt="Room Image">
-                <img src="{{ asset('gambar/gallery/gambar3/' . $image->gambar3) }}" alt="Room Image">
-                <img src="{{ asset('gambar/gallery/gambar4/' . $image->gambar4) }}" alt="Room Image">
+                <img src="{{ Storage::url($image->gambar_utama) }}" alt="Room Image">
+                <img src="{{ Storage::url($image->gambar2) }}" alt="Room Image">
+                <img src="{{ Storage::url($image->gambar3) }}" alt="Room Image">
+                <img src="{{ Storage::url($image->gambar4) }}" alt="Room Image">
             @endforeach
         </div>
         <form id="bookingForm" class="booking-form" action="{{ route('create.booking') }}" method="POST">

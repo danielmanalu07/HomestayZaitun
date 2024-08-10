@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Kontent1Controller extends Controller
 {
@@ -103,18 +104,19 @@ class Kontent1Controller extends Controller
                 'teks' => 'required',
             ]);
 
+            // Handle file upload
             $fileName = time() . '.' . $request->file('gambar')->extension();
-            $request->file('gambar')->move(public_path('gambar/konten'), $fileName);
+            $filePath = $request->file('gambar')->storeAs('public/konten', $fileName);
 
             $konten1 = new Content1();
-            $konten1->gambar = $fileName;
+            $konten1->gambar = str_replace('public/', '', $filePath);
             $konten1->teks = $request->input('teks');
 
             $konten1->save();
             return redirect('/admin/konten1')->with('success', 'Data Berhasil Ditambahkan');
         } catch (\Throwable $th) {
-            Log::error('Error created konten data: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi Kesalahan Saat Menyimpan Data Konten');
+            Log::error('Error creating konten data: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Saat Menyimpan Data Konten: ' . $th->getMessage());
         }
     }
 
@@ -148,15 +150,18 @@ class Kontent1Controller extends Controller
             $konten = Content1::findOrFail($id);
 
             if ($request->hasFile('gambar')) {
-                File::delete(public_path('gambar/konten/' . $konten->gambar));
+                if ($konten->gambar && Storage::exists('public/' . $konten->gambar)) {
+                    Storage::delete('public/' . $konten->gambar);
+                }
+
                 $fileName = time() . '.' . $request->file('gambar')->extension();
-                $request->file('gambar')->move(public_path('gambar/konten'), $fileName);
-                $konten->gambar = $fileName;
+                $filePath = $request->file('gambar')->storeAs('public/konten', $fileName);
+                $konten->gambar = str_replace('public/', '', $filePath); // Store relative path
             }
 
             $konten->teks = $request->teks;
 
-            $konten->update();
+            $konten->save(); // Use save() instead of update() for changes
 
             return redirect('/admin/konten1')->with('success', 'Konten Berhasil Diupdate');
         } catch (\Throwable $th) {
@@ -172,6 +177,9 @@ class Kontent1Controller extends Controller
     {
         try {
             $konten = Content1::findOrFail($id);
+            if ($konten->gambar && Storage::exists('public/' . $konten->gambar)) {
+                Storage::delete('public/' . $konten->gambar);
+            }
             $konten->delete();
             return redirect()->back()->with('success', 'Data Berhasil Dihapus');
         } catch (\Throwable $th) {

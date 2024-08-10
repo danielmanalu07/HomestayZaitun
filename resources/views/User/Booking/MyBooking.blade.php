@@ -49,7 +49,7 @@
 @endpush
 
 @section('content')
-    <div class="container my-5 pt-5">
+    <div class="container" style="margin-top: 3%;padding-top: 5%;padding-bottom: 5%;">
         <h1 class="mb-4">Pesanan Saya</h1>
         <div class="card">
             <div class="card-header text-center">

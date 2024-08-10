@@ -44,17 +44,15 @@
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td class="text-center">
-                                    <img src="{{ asset('gambar/konten/' . $item->gambar) }}" alt="Gambar Konten"
+                                    <img src="{{ Storage::url($item->gambar) }}" alt="Gambar Konten"
                                         class="img-fluid custom-img">
                                 </td>
                                 <td>{{ Str::limit($item->teks, 20) }}</td>
                                 <td>
                                     <button class="btn btn-info btn-detail" data-teks="{{ $item->teks }}"
-                                        data-gambar="{{ asset('gambar/konten/' . $item->gambar) }}"><i
-                                            class="fas fa-eye"></i></button>
+                                        data-gambar="{{ Storage::url($item->gambar) }}"><i class="fas fa-eye"></i></button>
                                     <button class="btn btn-warning btn-edit" data-id="{{ $item->id }}"
-                                        data-teks="{{ $item->teks }}"
-                                        data-gambar="{{ asset('gambar/konten/' . $item->gambar) }}"><i
+                                        data-teks="{{ $item->teks }}" data-gambar="{{ Storage::url($item->gambar) }}"><i
                                             class="fas fa-edit"></i></button>
                                     <button class="btn btn-danger btn-delete" data-id="{{ $item->id }}"><i
                                             class="fas fa-trash"></i></button>

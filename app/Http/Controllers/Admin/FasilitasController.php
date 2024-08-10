@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class FasilitasController extends Controller
 {
@@ -103,18 +104,21 @@ class FasilitasController extends Controller
                 'deskripsi' => 'required',
                 'gambar' => 'required|mimes:png,jpg,jpeg',
             ]);
+
             $fileName = $request->nama . '.' . $request->file('gambar')->extension();
-            $request->file('gambar')->move(public_path('gambar/fasilitas'), $fileName);
+
+            $filePath = $request->file('gambar')->storeAs('public/fasilitas', $fileName);
 
             $fasilitas = new Fasilitas();
             $fasilitas->nama = $request->input('nama');
             $fasilitas->deskripsi = $request->input('deskripsi');
-            $fasilitas->gambar = $fileName;
+            $fasilitas->gambar = str_replace('public/', '', $filePath);
             $fasilitas->save();
+
             return redirect('/admin/fasilitas')->with('success', 'Data Berhasil Ditambahkan');
         } catch (\Throwable $th) {
             Log::error('Error storing data fasilitas: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data fasilitas.' . 'Error : ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data fasilitas. Error: ' . $th->getMessage());
         }
     }
 
@@ -148,13 +152,18 @@ class FasilitasController extends Controller
 
             $fasilitas = Fasilitas::findOrFail($id);
 
-            // If there's a new image, handle the upload and update
             if ($request->hasFile('gambar')) {
-                $path = public_path('gambar/fasilitas/');
-                File::delete($path . $fasilitas->gambar);
-                $filename = $request->nama . '.' . $request->file('gambar')->extension();
-                $request->file('gambar')->move($path, $filename);
-                $fasilitas->gambar = $filename;
+                // Delete the old image from storage if it exists
+                if ($fasilitas->gambar && Storage::exists('public/' . $fasilitas->gambar)) {
+                    Storage::delete('public/' . $fasilitas->gambar);
+                }
+
+                // Store the new image in the 'fasilitas' directory inside 'storage/app/public'
+                $fileName = $request->nama . '.' . $request->file('gambar')->extension();
+                $filePath = $request->file('gambar')->storeAs('public/fasilitas', $fileName);
+
+                // Update the 'gambar' field with the new file name
+                $fasilitas->gambar = str_replace('public/', '', $filePath);
             }
 
             $fasilitas->nama = $request->nama;
@@ -176,6 +185,9 @@ class FasilitasController extends Controller
     {
         try {
             $fasilitas = Fasilitas::findOrFail($id);
+            if ($fasilitas->gambar && Storage::exists('public/' . $fasilitas->gambar)) {
+                Storage::delete('public/' . $fasilitas->gambar);
+            }
             $fasilitas->delete();
             return redirect()->back()->with('success', 'Data berhasil dihapus');
         } catch (\Throwable $th) {

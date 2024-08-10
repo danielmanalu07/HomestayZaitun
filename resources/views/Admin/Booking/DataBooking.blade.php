@@ -106,8 +106,8 @@
                                 @else
                                     <div class="zoomable-image">
                                         <img class="img-fluid payment-img"
-                                            src="{{ asset('Customer/Bukti_Pembayaran/' . $booking->bukti_pembayaran) }}"
-                                            alt="pembayaran" width="300px" height="200px">
+                                            src="{{ Storage::url($booking->bukti_pembayaran) }}" alt="pembayaran"
+                                            width="300px" height="200px">
                                     </div>
                                 @endif
                             </td>

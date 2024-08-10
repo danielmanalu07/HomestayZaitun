@@ -1,4 +1,5 @@
 @extends('User.Layout.BaseLayout')
+
 @push('css')
     <style>
         .carousel-item {
@@ -43,10 +44,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 @endpush
+
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const spinner = document.getElementById('spinner');
             spinner.classList.remove('show');
         });
@@ -62,8 +64,11 @@
                     const kategori = JSON.parse(this.getAttribute('data-kategori'));
                     document.getElementById('modalNama').textContent = kategori.nama;
                     document.getElementById('modalDeskripsi').textContent = kategori.deskripsi;
+
+                    // Menggunakan URL dari storage
                     document.getElementById('modalGambar').src =
-                        `{{ asset('gambar/kategoriKamar') }}/${kategori.gambar}`;
+                        `{{ asset('storage') }}/${kategori.gambar}`;
+
                     const myModal = new bootstrap.Modal(document.getElementById('viewMoreModal'));
                     myModal.show();
                 });
@@ -71,6 +76,7 @@
         });
     </script>
 @endpush
+
 @section('content')
     <div id="spinner"
         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -101,8 +107,7 @@
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="room-item shadow rounded overflow-hidden">
                         <div class="position-relative image-container">
-                            <img class="img-fluid" src="{{ asset('gambar/kategoriKamar/' . $item->gambar) }}"
-                                alt="">
+                            <img class="img-fluid" src="{{ Storage::url($item->gambar) }}" alt="">
                         </div>
                         <div class="p-4 mt-2">
                             <div class="d-flex justify-content-between mb-3">
@@ -116,10 +121,11 @@
                             </div>
                             <p class="text-body mb-3">{{ Str::limit($item->deskripsi, 40) }}</p>
                             <div class="d-flex justify-content-between">
-                                <a class="btn btn-sm btn-info rounded py-2 px-4"
-                                    href="{{ route('detail.room', $item->id) }}">Detail Kamar</a>
                                 <button class="btn btn-sm btn-info rounded py-2 px-4 view-more-btn"
                                     data-kategori="{{ $item }}">Lihat Selengkapnya</button>
+                                <a class="btn btn-sm btn-info rounded py-2 px-4"
+                                    href="{{ route('detail.room', $item->id) }}">Detail Kamar</a>
+
                             </div>
                         </div>
                     </div>

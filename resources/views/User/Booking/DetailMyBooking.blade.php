@@ -159,7 +159,7 @@
         <h1>Detail Pesanan</h1>
     </div>
 
-    <div class="container pt-5">
+    <div class="container" style="padding-top: 5%; padding-bottom: 5%;">
         <div class="row">
             <div class="col-md-8 offset-md-2">
                 <div class="card">
@@ -253,8 +253,7 @@
                             @if ($booking->bukti_pembayaran == null)
                                 <p id="pembayaran">Belum Dibayar</p>
                             @else
-                                <img class="img-fluid payment-img"
-                                    src="{{ asset('Customer/Bukti_Pembayaran/' . $booking->bukti_pembayaran) }}"
+                                <img class="img-fluid payment-img" src="{{ Storage::url($booking->bukti_pembayaran) }}"
                                     alt="pembayaran" width="300px" height="200px">
                             @endif
                         </div>

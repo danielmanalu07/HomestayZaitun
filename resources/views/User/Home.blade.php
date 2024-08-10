@@ -121,7 +121,7 @@
             <div class="carousel-inner">
                 @foreach ($carousel as $index => $item)
                     <div class="carousel-item {{ $index == 0 ? 'active' : '' }}"
-                        style="background-image: url('{{ asset('gambar/carousel/' . $item->gambar) }}');">
+                        style="background-image: url('{{ Storage::url($item->gambar) }}');">
                         <div class="container">
                             <div class="banner_content text-center text-bg-dark">
                                 <h2>{{ $item->text }}</h2>
@@ -158,8 +158,8 @@
                     <div class="col-lg-3 col-sm-6">
                         <div class="accomodation_item text-center">
                             <div class="hotel_img">
-                                <img src="{{ asset('gambar/kategoriKamar/' . $kategori->gambar) }}" alt=""
-                                    width="100%" height="200px" style="object-fit: cover;">
+                                <img src="{{ Storage::url($kategori->gambar) }}" alt="" width="100%"
+                                    height="200px" style="object-fit: cover;">
                                 <a href="{{ route('detail.room', $kategori->id) }}" class="btn theme_btn button_hover">Lihat
                                     Detail</a>
                             </div>
@@ -199,8 +199,8 @@
                                         <div class="col-lg-4 col-md-6">
                                             <div class="facilities_item">
                                                 <div class="facilities_img mb-2">
-                                                    <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}"
-                                                        alt="{{ $item->nama }}" width="300px" height="150px"
+                                                    <img src="{{ Storage::url($item->gambar) }}" alt="{{ $item->nama }}"
+                                                        width="300px" height="150px"
                                                         class="img-fluid img-thumbnail zoom-image">
                                                 </div>
                                                 <h4>{{ $item->nama }}</h4>
@@ -236,8 +236,8 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="facilities_item">
                                 <div class="facilities_img mb-2">
-                                    <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}"
-                                        alt="{{ $item->nama }}" class="img-fluid img-thumbnail zoom-image">
+                                    <img src="{{ Storage::url($item->gambar) }}" alt="{{ $item->nama }}"
+                                        class="img-fluid img-thumbnail zoom-image">
                                 </div>
                                 <h4>{{ $item->nama }}</h4>
                                 <p id="deskripsi-{{ $item->id }}">
@@ -305,8 +305,8 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="single-recent-blog-post">
                             <div class="thumb">
-                                <img class="img-fluid" src="{{ asset('gambar/konten/' . $konten->gambar) }}"
-                                    alt="post" style="width: 100%; height: 250px; object-fit: cover;">
+                                <img class="img-fluid" src="{{ Storage::url($konten->gambar) }}" alt="post"
+                                    style="width: 100%; height: 250px; object-fit: cover;">
                             </div>
                             <div class="details">
                                 <p>{{ $konten->teks }}</p>

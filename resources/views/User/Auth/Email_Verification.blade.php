@@ -71,7 +71,7 @@
                             </div>
                         @endif
                         <div class="lock-image">
-                            <img src="{{ asset('gambar/images/lock.jpg') }}" class="w-100 h-100" alt="Lock Icon">
+                            <img src="{{ asset('img/lock.jpeg') }}" class="w-100 h-100" alt="Lock Icon">
                         </div>
                         <form id="verification-form" action="{{ route('verify.email') }}" method="POST">
                             @csrf

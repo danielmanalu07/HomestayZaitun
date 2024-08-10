@@ -35,18 +35,17 @@
                     @forelse ($fasilitas as $item)
                         <div class="col-md-3 col-sm-6">
                             <div class="card card-data my-2">
-                                <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}"
-                                    class="card-img-top img-thumbnail" alt="image_fasilitas">
+                                <img src="{{ Storage::url($item->gambar) }}" class="card-img-top img-thumbnail"
+                                    alt="image_fasilitas">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $item->nama }}</h5>
                                     <p class="card-text">{{ Str::limit($item->deskripsi, 30) }}</p>
                                     <button class="btn btn-info btn-detail" data-nama="{{ $item->nama }}"
                                         data-deskripsi="{{ $item->deskripsi }}"
-                                        data-gambar="{{ asset('gambar/fasilitas/' . $item->gambar) }}"><i
-                                            class="fas fa-eye"></i></button>
+                                        data-gambar="{{ Storage::url($item->gambar) }}"><i class="fas fa-eye"></i></button>
                                     <button class="btn btn-warning btn-edit" data-id="{{ $item->id }}"
                                         data-deskripsi="{{ $item->deskripsi }}" data-nama="{{ $item->nama }}"
-                                        data-gambar="{{ asset('gambar/fasilitas/' . $item->gambar) }}"><i
+                                        data-gambar="{{ Storage::url($item->gambar) }}"><i
                                             class="fas fa-edit"></i></button>
                                     <button class="btn btn-danger btn-delete" data-id="{{ $item->id }}"><i
                                             class="fas fa-trash"></i></button>

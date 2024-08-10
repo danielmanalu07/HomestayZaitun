@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
@@ -108,41 +109,39 @@ class GalleryController extends Controller
                 'id_kamar' => 'required|unique:galleries,id_kamar',
             ]);
 
-            if ($request->hasFile('gambar_utama')) {
-                $g_utama = 'g_utama' . $request->id_kamar . '.' . $request->file('gambar_utama')->extension();
-                $request->file('gambar_utama')->move(public_path('gambar/gallery/gambar_utama'), $g_utama);
-            }
-
-            $g_2 = null;
-            if ($request->hasFile('gambar2')) {
-                $g_2 = 'g_2' . $request->id_kamar . '.' . $request->file('gambar2')->extension();
-                $request->file('gambar2')->move(public_path('gambar/gallery/gambar2'), $g_2);
-            }
-
-            $g_3 = null;
-            if ($request->hasFile('gambar3')) {
-                $g_3 = 'g_3' . $request->id_kamar . '.' . $request->file('gambar3')->extension();
-                $request->file('gambar3')->move(public_path('gambar/gallery/gambar3'), $g_3);
-            }
-
-            $g_4 = null;
-            if ($request->hasFile('gambar4')) {
-                $g_4 = 'g_4' . $request->id_kamar . '.' . $request->file('gambar4')->extension();
-                $request->file('gambar4')->move(public_path('gambar/gallery/gambar4'), $g_4);
-            }
-
             $galleries = new Gallery();
-            $galleries->gambar_utama = $g_utama ?? '';
-            $galleries->gambar2 = $g_2 ?? '';
-            $galleries->gambar3 = $g_3 ?? '';
-            $galleries->gambar4 = $g_4 ?? '';
             $galleries->id_kamar = $request->id_kamar;
+
+            // Handle file uploads
+            if ($request->hasFile('gambar_utama')) {
+                $fileName = 'g_utama' . $request->id_kamar . '.' . $request->file('gambar_utama')->extension();
+                $filePath = $request->file('gambar_utama')->storeAs('public/gallery/gambar_utama', $fileName);
+                $galleries->gambar_utama = str_replace('public/', '', $filePath); // Store relative path
+            }
+
+            if ($request->hasFile('gambar2')) {
+                $fileName = 'g_2' . $request->id_kamar . '.' . $request->file('gambar2')->extension();
+                $filePath = $request->file('gambar2')->storeAs('public/gallery/gambar2', $fileName);
+                $galleries->gambar2 = str_replace('public/', '', $filePath); // Store relative path
+            }
+
+            if ($request->hasFile('gambar3')) {
+                $fileName = 'g_3' . $request->id_kamar . '.' . $request->file('gambar3')->extension();
+                $filePath = $request->file('gambar3')->storeAs('public/gallery/gambar3', $fileName);
+                $galleries->gambar3 = str_replace('public/', '', $filePath); // Store relative path
+            }
+
+            if ($request->hasFile('gambar4')) {
+                $fileName = 'g_4' . $request->id_kamar . '.' . $request->file('gambar4')->extension();
+                $filePath = $request->file('gambar4')->storeAs('public/gallery/gambar4', $fileName);
+                $galleries->gambar4 = str_replace('public/', '', $filePath); // Store relative path
+            }
 
             $galleries->save();
             return redirect('/admin/gallery')->with('success', 'Data Berhasil Ditambahkan');
         } catch (\Throwable $th) {
             Log::error('Error creating gallery data: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi Kesalahan Menyimpan Data Gallery : ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Menyimpan Data Gallery: ' . $th->getMessage());
         }
     }
 
@@ -178,45 +177,52 @@ class GalleryController extends Controller
 
             $galleries = Gallery::findOrFail($id);
 
+            // Handle file uploads
             if ($request->hasFile('gambar_utama')) {
-                File::delete(public_path('gambar/gallery/gambar_utama/') . $request->gambar_utama);
-                $g_utama = 'g_utama' . $request->id_kamar . '.' . $request->file('gambar_utama')->extension();
-                $request->file('gambar_utama')->move(public_path('gambar/gallery/gambar_utama'), $g_utama);
-                $galleries->gambar_utama = $g_utama;
+                // Delete the old image from storage if it exists
+                if ($galleries->gambar_utama && Storage::exists('public/' . $galleries->gambar_utama)) {
+                    Storage::delete('public/' . $galleries->gambar_utama);
+                }
+                $fileName = 'g_utama' . $request->id_kamar . '.' . $request->file('gambar_utama')->extension();
+                $filePath = $request->file('gambar_utama')->storeAs('public/gallery/gambar_utama', $fileName);
+                $galleries->gambar_utama = str_replace('public/', '', $filePath); // Store relative path
             }
 
-            $g_2 = null;
             if ($request->hasFile('gambar2')) {
-                File::delete(public_path('gambar/gallery/gambar2/') . $request->gambar2);
-                $g_2 = 'g_2' . $request->id_kamar . '.' . $request->file('gambar2')->extension();
-                $request->file('gambar2')->move(public_path('gambar/gallery/gambar2'), $g_2);
-                $galleries->gambar2 = $g_2;
+                if ($galleries->gambar2 && Storage::exists('public/' . $galleries->gambar2)) {
+                    Storage::delete('public/' . $galleries->gambar2);
+                }
+                $fileName = 'g_2' . $request->id_kamar . '.' . $request->file('gambar2')->extension();
+                $filePath = $request->file('gambar2')->storeAs('public/gallery/gambar2', $fileName);
+                $galleries->gambar2 = str_replace('public/', '', $filePath); // Store relative path
             }
 
-            $g_3 = null;
             if ($request->hasFile('gambar3')) {
-                File::delete(public_path('gambar/gallery/gambar3/') . $request->gambar3);
-                $g_3 = 'g_3' . $request->id_kamar . '.' . $request->file('gambar3')->extension();
-                $request->file('gambar3')->move(public_path('gambar/gallery/gambar3'), $g_3);
-                $galleries->gambar3 = $g_3;
+                if ($galleries->gambar3 && Storage::exists('public/' . $galleries->gambar3)) {
+                    Storage::delete('public/' . $galleries->gambar3);
+                }
+                $fileName = 'g_3' . $request->id_kamar . '.' . $request->file('gambar3')->extension();
+                $filePath = $request->file('gambar3')->storeAs('public/gallery/gambar3', $fileName);
+                $galleries->gambar3 = str_replace('public/', '', $filePath); // Store relative path
             }
 
-            $g_4 = null;
             if ($request->hasFile('gambar4')) {
-                File::delete(public_path('gambar/gallery/gambar4/') . $request->gambar4);
-                $g_4 = 'g_4' . $request->id_kamar . '.' . $request->file('gambar4')->extension();
-                $request->file('gambar4')->move(public_path('gambar/gallery/gambar4'), $g_4);
-                $galleries->gambar4 = $g_4;
+                if ($galleries->gambar4 && Storage::exists('public/' . $galleries->gambar4)) {
+                    Storage::delete('public/' . $galleries->gambar4);
+                }
+                $fileName = 'g_4' . $request->id_kamar . '.' . $request->file('gambar4')->extension();
+                $filePath = $request->file('gambar4')->storeAs('public/gallery/gambar4', $fileName);
+                $galleries->gambar4 = str_replace('public/', '', $filePath); // Store relative path
             }
 
             $galleries->id_kamar = $request->id_kamar;
 
-            $galleries->update();
+            $galleries->save();
 
             return redirect('/admin/gallery')->with('success', 'Gallery Berhasil Diupdate');
         } catch (\Throwable $th) {
             Log::error('Error updating gallery data: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi Kesalahan Mengupdate Data Gallery : ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Mengupdate Data Gallery: ' . $th->getMessage());
         }
     }
 
@@ -227,6 +233,18 @@ class GalleryController extends Controller
     {
         try {
             $gallery = Gallery::findOrFail($id);
+            if ($gallery->gambar_utama && Storage::exists('public/' . $gallery->gambar_utama)) {
+                Storage::delete('public/' . $gallery->gambar_utama);
+            }
+            if ($gallery->gambar2 && Storage::exists('public/' . $gallery->gambar2)) {
+                Storage::delete('public/' . $gallery->gambar2);
+            }
+            if ($gallery->gambar3 && Storage::exists('public/' . $gallery->gambar3)) {
+                Storage::delete('public/' . $gallery->gambar3);
+            }
+            if ($gallery->gambar4 && Storage::exists('public/' . $gallery->gambar4)) {
+                Storage::delete('public/' . $gallery->gambar4);
+            }
             $gallery->delete();
             return redirect()->back()->with('success', 'Data Berhasil Dihapus');
         } catch (\Throwable $th) {

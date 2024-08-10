@@ -59,39 +59,39 @@
                     @foreach ($galleries as $gallery)
                         <div class="col-md-4 mb-4">
                             <div class="card h-100">
-                                <a href="{{ asset('gambar/gallery/gambar_utama/' . $gallery->gambar_utama) }}"
+                                <a href="{{ Storage::url($gallery->gambar_utama) }}"
                                     data-lightbox="gallery-{{ $gallery->id }}">
-                                    <img src="{{ asset('gambar/gallery/gambar_utama/' . $gallery->gambar_utama) }}"
-                                        class="card-img-top" alt="Gambar Utama">
+                                    <img src="{{ Storage::url($gallery->gambar_utama) }}" class="card-img-top"
+                                        alt="Gambar Utama">
                                 </a>
                                 <div class="card-body">
                                     <h5 class="card-title">No Kamar: {{ $gallery->kamar->no_kamar }}</h5>
                                     <div class="gallery-images">
                                         @if ($gallery->gambar2)
-                                            <a href="{{ asset('gambar/gallery/gambar2/' . $gallery->gambar2) }}"
+                                            <a href="{{ Storage::url($gallery->gambar2) }}"
                                                 data-lightbox="gallery-{{ $gallery->id }}">
-                                                <img src="{{ asset('gambar/gallery/gambar2/' . $gallery->gambar2) }}"
-                                                    alt="Gambar 2" class="img-thumbnail">
+                                                <img src="{{ Storage::url($gallery->gambar2) }}" alt="Gambar 2"
+                                                    class="img-thumbnail">
                                             </a>
                                         @else
                                             <div class="img-placeholder">Gambar 2 tidak tersedia</div>
                                         @endif
 
                                         @if ($gallery->gambar3)
-                                            <a href="{{ asset('gambar/gallery/gambar3/' . $gallery->gambar3) }}"
+                                            <a href="{{ Storage::url($gallery->gambar3) }}"
                                                 data-lightbox="gallery-{{ $gallery->id }}">
-                                                <img src="{{ asset('gambar/gallery/gambar3/' . $gallery->gambar3) }}"
-                                                    alt="Gambar 3" class="img-thumbnail">
+                                                <img src="{{ Storage::url($gallery->gambar3) }}" alt="Gambar 3"
+                                                    class="img-thumbnail">
                                             </a>
                                         @else
                                             <div class="img-placeholder">Gambar 3 tidak tersedia</div>
                                         @endif
 
                                         @if ($gallery->gambar4)
-                                            <a href="{{ asset('gambar/gallery/gambar4/' . $gallery->gambar4) }}"
+                                            <a href="{{ Storage::url($gallery->gambar4) }}"
                                                 data-lightbox="gallery-{{ $gallery->id }}">
-                                                <img src="{{ asset('gambar/gallery/gambar4/' . $gallery->gambar4) }}"
-                                                    alt="Gambar 4" class="img-thumbnail">
+                                                <img src="{{ Storage::url($gallery->gambar4) }}" alt="Gambar 4"
+                                                    class="img-thumbnail">
                                             </a>
                                         @else
                                             <div class="img-placeholder">Gambar 4 tidak tersedia</div>
@@ -100,10 +100,10 @@
                                 </div>
                                 <div class="card-footer text-center">
                                     <button type="button" class="btn btn-warning btn-edit" data-id="{{ $gallery->id }}"
-                                        data-gambar_utama="{{ asset('gambar/gallery/gambar_utama/' . $gallery->gambar_utama) }}"
-                                        data-gambar2="{{ $gallery->gambar2 ? asset('gambar/gallery/gambar2/' . $gallery->gambar2) : '' }}"
-                                        data-gambar3="{{ $gallery->gambar3 ? asset('gambar/gallery/gambar3/' . $gallery->gambar3) : '' }}"
-                                        data-gambar4="{{ $gallery->gambar4 ? asset('gambar/gallery/gambar4/' . $gallery->gambar4) : '' }}"
+                                        data-gambar_utama="{{ Storage::url($gallery->gambar_utama) }}"
+                                        data-gambar2="{{ $gallery->gambar2 ? Storage::url($gallery->gambar2) : '' }}"
+                                        data-gambar3="{{ $gallery->gambar3 ? Storage::url($gallery->gambar3) : '' }}"
+                                        data-gambar4="{{ $gallery->gambar4 ? Storage::url($gallery->gambar4) : '' }}"
                                         data-id_kamar="{{ $gallery->id_kamar }}">
                                         <i class="fas fa-edit"></i>
                                     </button>

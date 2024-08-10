@@ -25,7 +25,7 @@
 @endpush
 
 @section('content')
-    <div class="container mt-5 pt-5">
+    <div class="container" style="padding-top: 10%;">
         <div class="row">
             <!-- Profile Section -->
             <div class="col-md-6">
@@ -52,8 +52,8 @@
                             <div class="text-center mb-4">
                                 <div class="position-relative d-inline-block">
                                     @if ($user->photo)
-                                        <img id="profile-photo" src="{{ asset('Customer/Profile/' . $user->photo) }}"
-                                            alt="Profile Photo" class="img-thumbnail rounded-circle" width="150">
+                                        <img id="profile-photo" src="{{ Storage::url($user->photo) }}" alt="Profile Photo"
+                                            class="img-thumbnail rounded-circle" width="150">
                                     @else
                                         <img id="profile-photo" src="https://via.placeholder.com/150"
                                             alt="Default Profile Photo" class="img-thumbnail rounded-circle" width="150">

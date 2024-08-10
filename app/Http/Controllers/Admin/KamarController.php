@@ -13,6 +13,7 @@ use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class KamarController extends Controller
 {
@@ -69,10 +70,10 @@ class KamarController extends Controller
         }
 
         $images = [
-            'gambar_utama' => $gallery->gambar_utama ? asset('gambar/gallery/gambar_utama/' . $gallery->gambar_utama) : null,
-            'gambar2' => $gallery->gambar2 ? asset('gambar/gallery/gambar2/' . $gallery->gambar2) : null,
-            'gambar3' => $gallery->gambar3 ? asset('gambar/gallery/gambar3/' . $gallery->gambar3) : null,
-            'gambar4' => $gallery->gambar4 ? asset('gambar/gallery/gambar4/' . $gallery->gambar4) : null,
+            'gambar_utama' => $gallery->gambar_utama ? Storage::url($gallery->gambar_utama) : null,
+            'gambar2' => $gallery->gambar2 ? Storage::url($gallery->gambar2) : null,
+            'gambar3' => $gallery->gambar3 ? Storage::url($gallery->gambar3) : null,
+            'gambar4' => $gallery->gambar4 ? Storage::url($gallery->gambar4) : null,
         ];
 
         return response()->json($images);

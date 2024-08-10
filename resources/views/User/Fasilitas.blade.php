@@ -64,7 +64,7 @@
             @foreach ($fasilitas as $item)
                 <div class="col-md-4">
                     <div class="facility">
-                        <img src="{{ asset('gambar/fasilitas/' . $item->gambar) }}" alt="Image">
+                        <img src="{{ Storage::url($item->gambar) }}" alt="Image">
                         <div class="facility-description">
                             <h4>{{ $item->nama }}</h4>
                             <p>{{ $item->deskripsi }}</p>

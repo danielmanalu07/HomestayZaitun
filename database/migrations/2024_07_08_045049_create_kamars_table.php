@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('kamars', function (Blueprint $table) {
             $table->id();
             $table->string('no_kamar');
-            $table->decimal('harga_kamar');
+            $table->float('harga_kamar');
             $table->integer('kapasitas');
             $table->enum('status', ['Tersedia', 'Sedang Digunakan', 'Tidak Tersedia']);
             $table->integer('view');

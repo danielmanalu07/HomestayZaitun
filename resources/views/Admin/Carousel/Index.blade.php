@@ -32,16 +32,13 @@
                         @forelse ($carousels as $key => $item)
                             <tr>
                                 <th scope="row">{{ $key + 1 }}</th>
-                                <td><img src="{{ asset('gambar/carousel/' . $item->gambar) }}" height="100px"
-                                        alt=""></td>
+                                <td><img src="{{ Storage::url($item->gambar) }}" height="100px" alt=""></td>
                                 <td>{{ Str::limit($item->text, 10) }}</td>
                                 <td>
                                     <button class="btn btn-info btn-detail" data-text="{{ $item->text }}"
-                                        data-gambar="{{ asset('gambar/carousel/' . $item->gambar) }}"><i
-                                            class="fas fa-eye"></i></button>
+                                        data-gambar="{{ Storage::url($item->gambar) }}"><i class="fas fa-eye"></i></button>
                                     <button class="btn btn-warning btn-edit" data-id="{{ $item->id }}"
-                                        data-text="{{ $item->text }}"
-                                        data-gambar="{{ asset('gambar/carousel/' . $item->gambar) }}"><i
+                                        data-text="{{ $item->text }}" data-gambar="{{ Storage::url($item->gambar) }}"><i
                                             class="fas fa-edit"></i></button>
                                     <button class="btn btn-danger btn-delete" data-id="{{ $item->id }}"><i
                                             class="fas fa-trash"></i></button>

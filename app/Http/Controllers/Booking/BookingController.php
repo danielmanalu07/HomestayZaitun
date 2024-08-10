@@ -9,6 +9,8 @@ use App\Models\Kamar;
 use App\Notifications\BookingNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class BookingController extends Controller
 {
@@ -122,11 +124,18 @@ class BookingController extends Controller
         try {
             $booking = Booking::findOrFail($id);
             if ($request->hasFile('paymentProof')) {
+                // Handle file upload
                 $file = $request->file('paymentProof');
                 $fileName = 'payment_' . $id . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('Customer/Bukti_Pembayaran'), $fileName);
+                $filePath = $file->storeAs('public/Bukti_Pembayaran', $fileName);
 
-                $booking->bukti_pembayaran = $fileName;
+                // Remove old file if it exists
+                if ($booking->bukti_pembayaran && Storage::exists('public/Bukti_Pembayaran/' . $booking->bukti_pembayaran)) {
+                    Storage::delete('public/Bukti_Pembayaran/' . $booking->bukti_pembayaran);
+                }
+
+                // Update the booking with the new file path
+                $booking->bukti_pembayaran = str_replace('public/', '', $filePath); // Store relative path
                 $booking->save();
 
                 return redirect()->back()->with('success', 'Berhasil Mengupload Bukti Pembayaran');
@@ -134,6 +143,7 @@ class BookingController extends Controller
                 return redirect()->back()->with('error', 'File tidak ditemukan');
             }
         } catch (\Throwable $th) {
+            Log::error('Error uploading payment proof: ' . $th->getMessage());
             return redirect()->back()->with('error', 'Terjadi Kesalahan Mengupload Bukti Pembayaran');
         }
     }

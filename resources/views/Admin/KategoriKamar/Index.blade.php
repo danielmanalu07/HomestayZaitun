@@ -36,8 +36,7 @@
                                 <th scope="row">{{ $key + 1 }}</th>
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ Str::limit($item->deskripsi, 10) }}</td>
-                                <td><img src="{{ asset('gambar/kategoriKamar/' . $item->gambar) }}" alt="Image Kategori"
-                                        class="img-kategori">
+                                <td><img src="{{ Storage::url($item->gambar) }}" alt="Image Kategori" class="img-kategori">
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-info btn-detail" data-nama="{{ $item->nama }}"
@@ -46,7 +45,7 @@
                                     </button>
                                     <button class="btn btn-sm btn-warning btn-edit" data-id="{{ $item->id }}"
                                         data-nama="{{ $item->nama }}" data-deskripsi="{{ $item->deskripsi }}"
-                                        data-gambar="{{ asset('gambar/kategoriKamar/' . $item->gambar) }}">
+                                        data-gambar="{{ Storage::url($item->gambar) }}">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-danger btn-delete" data-id="{{ $item->id }}"><i

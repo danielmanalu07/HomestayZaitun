@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CarouselController extends Controller
 {
@@ -100,19 +101,21 @@ class CarouselController extends Controller
                 'gambar' => 'required|mimes:png,jpg,jpeg',
                 'text' => 'nullable',
             ]);
+
             $fileName = time() . '.' . $request->file('gambar')->extension();
-            $request->file('gambar')->move(public_path('gambar/carousel'), $fileName);
+
+            $filePath = $request->file('gambar')->storeAs('public/carousel', $fileName);
 
             $carousel = new Carousel();
             $carousel->text = $request->input('text');
-            $carousel->gambar = $fileName;
+            $carousel->gambar = str_replace('public/', '', $filePath);
             $carousel->save();
+
             return redirect('/admin/carousel')->with('success', 'Data Berhasil Ditambah');
         } catch (\Throwable $th) {
-            Log::error('Error creating fasilitas: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi Kesalahan Penyimpanan Data Carousel' . $th->getMessage());
+            Log::error('Error creating carousel: ' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi Kesalahan Penyimpanan Data Carousel. Error: ' . $th->getMessage());
         }
-
     }
 
     /**
@@ -138,26 +141,31 @@ class CarouselController extends Controller
     {
         try {
             $request->validate([
-                'gambar' => 'nullable|mimes:png,jpg,jpeg' . $id,
+                'gambar' => 'nullable|mimes:png,jpg,jpeg',
                 'text' => 'nullable',
             ]);
 
             $carousel = Carousel::findOrFail($id);
+
             if ($request->hasFile('gambar')) {
-                $path = public_path('gambar/carousel/');
-                File::delete($path . $carousel->gambar);
-                $file = time() . '.' . $request->file('gambar')->extension();
-                $request->file('gambar')->move($path, $file);
-                $carousel->gambar = $file;
+                if ($carousel->gambar && Storage::exists('public/' . $carousel->gambar)) {
+                    Storage::delete('public/' . $carousel->gambar);
+                }
+
+                $fileName = time() . '.' . $request->file('gambar')->extension();
+                $filePath = $request->file('gambar')->storeAs('public/carousel', $fileName);
+
+                $carousel->gambar = str_replace('public/', '', $filePath);
             }
 
-            $carousel->text = $request->text;
+            $carousel->text = $request->input('text');
 
-            $carousel->update();
+            $carousel->save();
+
             return redirect('/admin/carousel')->with('success', 'Carousel Berhasil diupdate');
         } catch (\Throwable $th) {
             Log::error('Error updating data carousel: ' . $th->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengupdate data carousel' . $th->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengupdate data carousel. Error: ' . $th->getMessage());
         }
     }
 
@@ -168,6 +176,9 @@ class CarouselController extends Controller
     {
         try {
             $carousels = Carousel::findOrFail($id);
+            if ($carousels->gambar && Storage::exists('public/' . $carousels->gambar)) {
+                Storage::delete('public/' . $carousels->gambar);
+            }
             $carousels->delete();
             return redirect()->back()->with('success', 'Data Berhasil dihapus');
         } catch (\Throwable $th) {
